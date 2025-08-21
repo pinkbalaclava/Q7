@@ -1,0 +1,135 @@
+{
+  "framework": "VITE_REACT",
+  "routing": {
+    "style": "code-defined",
+    "router_files": ["src/App.tsx"]
+  },
+  "target": {
+    "route": "/dashboard-v2",
+    "source_files": ["src/pages/DashboardV2/index.tsx"]
+  },
+  "entry": {
+    "file": "index.html",
+    "spa_fallback": "yes",
+    "package_scripts": {
+      "dev": "vite",
+      "build": "vite build",
+      "preview": "vite preview"
+    }
+  },
+  "path_aliases": [
+    {
+      "alias": "@/*",
+      "resolves_to": "./src/*"
+    }
+  ],
+  "typescript": {
+    "enabled": true,
+    "strict": true
+  },
+  "styling": {
+    "tailwind": true,
+    "css_modules": false,
+    "scss": false,
+    "styled_components": false,
+    "emotion": false,
+    "style_entrypoints": ["src/index.css"]
+  },
+  "tokens": {
+    "files": ["tailwind.config.js", "src/lib/tokens.ts"],
+    "inferred": {
+      "colors": ["#B7FF3D", "#f59e0b", "#3b82f6", "#db2777", "#6366f1", "#10b981"],
+      "radius": ["unknown"],
+      "shadows": ["unknown"]
+    }
+  },
+  "graph": {
+    "nodes": [
+      {"path": "src/pages/DashboardV2/index.tsx", "type": "component", "imports": ["react", "lucide-react", "src/components/PersonaNav", "src/persona/nav", "src/pages/DashboardV2/demo-data", "src/pages/DashboardV2/types", "src/pages/DashboardV2/TopStats", "src/pages/DashboardV2/Board", "src/pages/DashboardV2/List", "src/pages/DashboardV2/CalendarView", "src/pages/DashboardV2/WideContainer", "src/pages/DashboardV2/HeaderBlock"]},
+      {"path": "src/components/PersonaNav.tsx", "type": "component", "imports": ["react", "react-router-dom"]},
+      {"path": "src/persona/nav.ts", "type": "data", "imports": []},
+      {"path": "src/pages/DashboardV2/demo-data.ts", "type": "data", "imports": ["src/pages/DashboardV2/types"]},
+      {"path": "src/pages/DashboardV2/types.ts", "type": "data", "imports": []},
+      {"path": "src/pages/DashboardV2/TopStats.tsx", "type": "component", "imports": ["react", "lucide-react", "recharts", "src/pages/DashboardV2/types", "src/pages/DashboardV2/metrics", "src/pages/DashboardV2/NestedStatusKanbanChart", "src/components/charts/OnTimeBurnupCard"]},
+      {"path": "src/pages/DashboardV2/Board.tsx", "type": "component", "imports": ["react", "lucide-react", "src/pages/DashboardV2/types", "src/pages/DashboardV2/status", "src/pages/DashboardV2/lanes5", "src/pages/DashboardV2/StatusPill", "src/pages/DashboardV2/LogActionSheet", "src/pages/DashboardV2/MoveMenu", "src/pages/DashboardV2/ServiceBadge", "src/pages/DashboardV2/PeriodModal"]},
+      {"path": "src/pages/DashboardV2/List.tsx", "type": "component", "imports": ["react", "lucide-react", "src/pages/DashboardV2/types", "src/pages/DashboardV2/status", "src/pages/DashboardV2/StatusPill", "src/pages/DashboardV2/MoveMenu", "src/pages/DashboardV2/LogActionSheet", "src/pages/DashboardV2/ServiceBadge", "src/pages/DashboardV2/PeriodModal"]},
+      {"path": "src/pages/DashboardV2/CalendarView.tsx", "type": "component", "imports": ["react", "react-big-calendar", "date-fns", "date-fns/locale", "src/pages/DashboardV2/calendarMap", "src/pages/DashboardV2/types", "src/pages/DashboardV2/PeriodModal", "src/pages/DashboardV2/WeekStrip", "src/components/ui/button"]},
+      {"path": "src/pages/DashboardV2/WideContainer.tsx", "type": "component", "imports": ["react"]},
+      {"path": "src/pages/DashboardV2/HeaderBlock.tsx", "type": "component", "imports": ["react"]},
+      {"path": "src/pages/DashboardV2/metrics.ts", "type": "util", "imports": ["src/pages/DashboardV2/types", "src/pages/DashboardV2/status"]},
+      {"path": "src/pages/DashboardV2/NestedStatusKanbanChart.tsx", "type": "component", "imports": ["react", "chart.js/auto", "src/components/ui/badge", "src/pages/DashboardV2/lanes5", "src/pages/DashboardV2/calendarMap", "src/pages/DashboardV2/types"]},
+      {"path": "src/components/charts/OnTimeBurnupCard.tsx", "type": "component", "imports": ["react", "react-chartjs-2", "chart.js", "src/pages/DashboardV2/types", "src/lib/tokens", "src/components/ui/card", "lucide-react"]},
+      {"path": "src/pages/DashboardV2/status.ts", "type": "util", "imports": ["src/pages/DashboardV2/types"]},
+      {"path": "src/pages/DashboardV2/lanes5.ts", "type": "util", "imports": []},
+      {"path": "src/pages/DashboardV2/StatusPill.tsx", "type": "component", "imports": ["react", "lucide-react"]},
+      {"path": "src/pages/DashboardV2/LogActionSheet.tsx", "type": "component", "imports": ["react", "lucide-react", "src/pages/DashboardV2/types"]},
+      {"path": "src/pages/DashboardV2/MoveMenu.tsx", "type": "component", "imports": ["react", "lucide-react", "src/pages/DashboardV2/types", "src/pages/DashboardV2/status"]},
+      {"path": "src/pages/DashboardV2/ServiceBadge.tsx", "type": "component", "imports": ["react", "src/lib/utils", "src/pages/DashboardV2/types"]},
+      {"path": "src/pages/DashboardV2/PeriodModal.tsx", "type": "component", "imports": ["react", "src/components/ui/dialog", "src/components/ui/tabs", "src/components/ui/button", "src/components/ui/input", "src/components/ui/textarea", "src/components/ui/label", "src/components/ui/badge", "src/components/ui/separator", "src/components/ui/scroll-area", "src/components/ui/alert-dialog", "src/pages/DashboardV2/types", "src/pages/DashboardV2/status", "src/pages/DashboardV2/StatusPill", "src/pages/DashboardV2/ServiceBadge", "src/pages/DashboardV2/data", "src/pages/DashboardV2/ActionTile", "src/pages/DashboardV2/InfoBox", "lucide-react"]},
+      {"path": "src/pages/DashboardV2/calendarMap.ts", "type": "util", "imports": ["date-fns", "src/pages/DashboardV2/types", "src/pages/DashboardV2/lanes5"]},
+      {"path": "src/pages/DashboardV2/WeekStrip.tsx", "type": "component", "imports": ["react", "date-fns", "src/pages/DashboardV2/calendarMap"]},
+      {"path": "src/components/ui/button.tsx", "type": "component", "imports": ["react", "@radix-ui/react-slot", "class-variance-authority", "src/lib/utils"]},
+      {"path": "src/lib/tokens.ts", "type": "util", "imports": ["src/pages/DashboardV2/lanes5"]},
+      {"path": "src/components/ui/card.tsx", "type": "component", "imports": ["react", "src/lib/utils"]},
+      {"path": "src/lib/utils.ts", "type": "util", "imports": ["clsx", "tailwind-merge"]},
+      {"path": "src/components/ui/dialog.tsx", "type": "component", "imports": ["react", "@radix-ui/react-dialog", "lucide-react", "src/lib/utils"]},
+      {"path": "src/components/ui/tabs.tsx", "type": "component", "imports": ["react", "@radix-ui/react-tabs", "src/lib/utils"]},
+      {"path": "src/components/ui/input.tsx", "type": "component", "imports": ["react", "src/lib/utils"]},
+      {"path": "src/components/ui/textarea.tsx", "type": "component", "imports": ["react", "src/lib/utils"]},
+      {"path": "src/components/ui/label.tsx", "type": "component", "imports": ["react", "@radix-ui/react-label", "class-variance-authority", "src/lib/utils"]},
+      {"path": "src/components/ui/badge.tsx", "type": "component", "imports": ["react", "class-variance-authority", "src/lib/utils"]},
+      {"path": "src/components/ui/separator.tsx", "type": "component", "imports": ["react", "@radix-ui/react-separator", "src/lib/utils"]},
+      {"path": "src/components/ui/scroll-area.tsx", "type": "component", "imports": ["react", "@radix-ui/react-scroll-area", "src/lib/utils"]},
+      {"path": "src/components/ui/alert-dialog.tsx", "type": "component", "imports": ["react", "@radix-ui/react-alert-dialog", "src/lib/utils", "src/components/ui/button"]},
+      {"path": "src/pages/DashboardV2/data.ts", "type": "data", "imports": ["src/pages/DashboardV2/types"]},
+      {"path": "src/pages/DashboardV2/ActionTile.tsx", "type": "component", "imports": ["react", "src/lib/utils"]},
+      {"path": "src/pages/DashboardV2/InfoBox.tsx", "type": "component", "imports": ["react", "src/lib/utils"]},
+      {"path": "src/index.css", "type": "style", "imports": []},
+      {"path": "index.html", "type": "asset", "imports": []},
+      {"path": "src/main.tsx", "type": "component", "imports": ["react", "react-dom/client", "react-router-dom", "src/App.tsx", "src/index.css"]},
+      {"path": "src/App.tsx", "type": "component", "imports": ["react", "react-router-dom", "src/hooks/useAuth", "src/components/Auth/LoginForm", "src/pages/DashboardV2"]}
+    ],
+    "external_deps_used": ["react", "react-dom", "react-router-dom", "lucide-react", "recharts", "react-chartjs-2", "chart.js", "react-big-calendar", "date-fns", "@radix-ui/react-dialog", "@radix-ui/react-tabs", "@radix-ui/react-slot", "@radix-ui/react-label", "@radix-ui/react-separator", "@radix-ui/react-scroll-area", "@radix-ui/react-alert-dialog", "class-variance-authority", "clsx", "tailwind-merge"]
+  },
+  "data_sources": {
+    "files": [
+      {"path": "src/pages/DashboardV2/demo-data.ts", "shape_keys": ["id", "clientId", "clientName", "service", "periodLabel", "dueDate", "status", "assignee", "amount", "reminderCount", "submittedAt", "filedAt", "documents", "comms", "approval", "history"]},
+      {"path": "src/pages/DashboardV2/types.ts", "shape_keys": ["Service", "PeriodDoc", "PeriodComms", "Approval", "Client", "VATStatus", "AccountsStatus", "SAStatus", "PeriodStatus", "Period"]},
+      {"path": "src/pages/DashboardV2/data.ts", "shape_keys": ["id", "name", "email", "phone", "address", "companyNo", "vatNo", "yearEnd", "tags", "startedAt", "activeServices", "risk", "engagementSignedAt", "amlVerifiedAt"]},
+      {"path": "src/persona/nav.ts", "shape_keys": ["href", "label"]}
+    ],
+    "fetch_calls": []
+  },
+  "env": {
+    "keys": []
+  },
+  "embeds": [],
+  "assets_used": [],
+  "ui_libs": {
+    "present": ["@radix-ui/react-alert-dialog", "@radix-ui/react-dropdown-menu", "@radix-ui/react-dialog", "@radix-ui/react-label", "@radix-ui/react-scroll-area", "@radix-ui/react-separator", "@radix-ui/react-slot", "@radix-ui/react-tabs", "class-variance-authority", "lucide-react"],
+    "used_by_graph": ["@radix-ui/react-alert-dialog", "@radix-ui/react-dialog", "@radix-ui/react-label", "@radix-ui/react-scroll-area", "@radix-ui/react-separator", "@radix-ui/react-slot", "@radix-ui/react-tabs", "class-variance-authority", "lucide-react"],
+    "heavy_single_use": ["react-big-calendar", "chart.js", "react-chartjs-2", "recharts"]
+  },
+  "lint_format": {
+    "eslint": "eslint.config.js",
+    "prettier": "none",
+    "notable_rules": ["react-hooks/recommended", "react-refresh/only-export-components", "noUnusedLocals", "noUnusedParameters"]
+  },
+  "removal_candidates": {
+    "pages": ["src/pages/dashboard.tsx", "src/pages/penalties.tsx", "src/pages/reminders.tsx", "src/pages/clients.tsx", "src/pages/client-profile.tsx", "src/pages/todo.tsx", "src/pages/performance.tsx", "src/pages/team.tsx", "src/pages/settings.tsx", "src/pages/client-portal.tsx", "src/pages/SharePage.tsx", "src/pages/ControlBoard.tsx"],
+    "components": ["src/components/Auth/LoginForm.tsx", "src/components/Dashboard/AccountantDashboard.tsx", "src/components/Dashboard/JobsTable.tsx", "src/components/Dashboard/StatusTile.tsx", "src/components/TodoList/TodoList.tsx", "src/components/TodoList/KanbanBoard.tsx", "src/components/Calendar/CalendarView.tsx", "src/components/Clients/ClientsPage.tsx", "src/components/ClientPortal/ClientPortal.tsx", "src/components/PenaltyAlerts/PenaltyAlertsPage.tsx", "src/components/ReminderQueue/ReminderQueuePage.tsx", "src/components/WorkflowSettings/WorkflowSettingsPage.tsx", "src/components/Automations/AutomationsPage.tsx", "src/components/ClientProfile/ClientProfile.tsx", "src/components/Profile/ProfilePage.tsx", "src/components/Layout/Navigation.tsx", "src/components/Layout/PersonaNav.tsx", "src/components/Layout/PersonaRoute.tsx", "src/components/Layout/PersonaSwitcher.tsx", "src/components/charts/FlowSwitcher.tsx", "src/components/charts/FlowSwitcherCard.tsx", "src/components/charts/OnTimeBurnup.tsx", "src/components/charts/OnTimeBurnupDaily.tsx", "src/components/charts/CumulativeFlowDiagram.tsx", "src/components/charts/CumulativeFlowDaily.tsx", "src/features/ops/Kanban.tsx", "src/features/ops/TaskModal.tsx", "src/features/ops/TodayList.tsx", "src/features/ops/KanbanCard.tsx", "src/components/Empty.tsx", "src/components/Modal.tsx"],
+    "styles": [],
+    "utils": ["src/data/selectors.ts", "src/data/kpis.ts"],
+    "other": ["src/hooks/useAuth.ts", "src/hooks/useData.ts", "src/data/seed.ts", "src/data/types.ts", "src/types/index.ts", "DESIGN_BRIEF.md", "DESIGN_BRIEF copy.md", "DESIGN_BRIEF copy copy.md", "DESIGN_BRIEF copy copy copy.md"]
+  },
+  "risks": [
+    "Heavy chart dependencies (chart.js, react-chartjs-2, recharts, react-big-calendar) used for analytics",
+    "Multiple UI component libraries (@radix-ui/*) - could be streamlined",
+    "Circular dependency risk between DashboardV2 components",
+    "No authentication system - uses mock login"
+  ],
+  "file_tree": {
+    "project_two_levels": ".\n├── README.md\n├── index.html\n├── package.json\n├── src/\n│   ├── main.tsx\n│   ├── App.tsx\n│   ├── index.css\n│   ├── vite-env.d.ts\n│   ├── lib/\n│   ├── hooks/\n│   ├── data/\n│   ├── types/\n│   ├── persona/\n│   ├── pages/\n│   ├── components/\n│   └── features/\n├── tsconfig.json\n├── tsconfig.app.json\n├── tsconfig.node.json\n├── vite.config.ts\n├── tailwind.config.js\n├── postcss.config.js\n├── eslint.config.js\n└── DESIGN_BRIEF*.md",
+    "kept_graph_full_tree": ".\n├── index.html\n├── src/\n│   ├── main.tsx\n│   ├── App.tsx (minimal routing)\n│   ├── index.css\n│   ├── lib/\n│   │   ├── utils.ts\n│   │   └── tokens.ts\n│   ├── persona/\n│   │   └── nav.ts\n│   ├── pages/\n│   │   └── DashboardV2/\n│   │       ├── index.tsx\n│   │       ├── types.ts\n│   │       ├── demo-data.ts\n│   │       ├── data.ts\n│   │       ├── status.ts\n│   │       ├── lanes5.ts\n│   │       ├── metrics.ts\n│   │       ├── calendarMap.ts\n│   │       ├── TopStats.tsx\n│   │       ├── Board.tsx\n│   │       ├── List.tsx\n│   │       ├── CalendarView.tsx\n│   │       ├── StatusPill.tsx\n│   │       ├── ServiceBadge.tsx\n│   │       ├── MoveMenu.tsx\n│   │       ├── LogActionSheet.tsx\n│   │       ├── PeriodModal.tsx\n│   │       ├── NestedStatusKanbanChart.tsx\n│   │       ├── ActionTile.tsx\n│   │       ├── InfoBox.tsx\n│   │       ├── WideContainer.tsx\n│   │       ├── HeaderBlock.tsx\n│   │       └── WeekStrip.tsx\n│   ├── components/\n│   │   ├── PersonaNav.tsx\n│   │   ├── charts/\n│   │   │   └── OnTimeBurnupCard.tsx\n│   │   └── ui/\n│   │       ├── button.tsx\n│   │       ├── card.tsx\n│   │       ├── dialog.tsx\n│   │       ├── tabs.tsx\n│   │       ├── input.tsx\n│   │       ├── textarea.tsx\n│   │       ├── label.tsx\n│   │       ├── badge.tsx\n│   │       ├── separator.tsx\n│   │       ├── scroll-area.tsx\n│   │       └── alert-dialog.tsx\n├── tsconfig.json\n├── tsconfig.app.json\n├── vite.config.ts\n├── tailwind.config.js\n└── postcss.config.js"
+  }
+}
