@@ -290,9 +290,11 @@ const DashboardV2: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <Filter className="w-4 h-4 text-gray-400" />
                     <select
+                      className={`filter px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[120px] ${
+                        service !== "ALL" ? "is-filtered" : ""
+                      }`}
                       value={service}
                       onChange={(e) => setService(e.target.value as Service | "ALL")}
-                      className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[120px]"
                       aria-label="Filter by service type"
                     >
                       <option value="ALL">All Services</option>
@@ -305,9 +307,11 @@ const DashboardV2: React.FC = () => {
 
                 {/* Status Filter */}
                 <select
+                  className={`filter px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[140px] ${
+                    status !== "ALL" ? "is-filtered" : ""
+                  }`}
                   value={status}
                   onChange={(e) => setStatus(e.target.value as "ALL" | PeriodStatus)}
-                  className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[140px]"
                   aria-label="Filter by status"
                 >
                   <option value="ALL">All Statuses</option>
@@ -318,9 +322,11 @@ const DashboardV2: React.FC = () => {
 
                 {/* Assignee Filter */}
                 <select
+                  className={`filter px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[120px] ${
+                    assignee !== "ALL" ? "is-filtered" : ""
+                  }`}
                   value={assignee}
                   onChange={(e) => setAssignee(e.target.value as "ALL" | string)}
-                  className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[120px]"
                   aria-label="Filter by assignee"
                 >
                   <option value="ALL">All Assignees</option>
@@ -330,7 +336,7 @@ const DashboardV2: React.FC = () => {
                 </select>
 
                 {/* Search Input */}
-                <div className="relative flex-1 min-w-[200px]">
+                <div className={`filter relative flex-1 min-w-[200px] ${search.trim() ? "is-filtered" : ""}`}>
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <input
                     type="text"
@@ -345,6 +351,13 @@ const DashboardV2: React.FC = () => {
 
               {/* Controls Row */}
               <div className="flex items-center space-x-4">
+                {/* Filtered Indicator */}
+                {(service !== "ALL" || status !== "ALL" || assignee !== "ALL" || search.trim()) && (
+                  <div className="filter-flag">
+                    Filtered
+                  </div>
+                )}
+
                 {/* View Toggle */}
                 <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
                 <button

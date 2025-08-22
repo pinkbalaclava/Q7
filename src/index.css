@@ -74,3 +74,34 @@ html {
   position: relative;
   z-index: 50;
 }
+
+/* Filter indicators */
+.filter {
+  position: relative;
+  border: 1px solid #d1d5db; /* --ui-border equivalent */
+}
+
+.filter.is-filtered {
+  border-color: #3B82F6;
+}
+
+.filter.is-filtered::after {
+  content: "";
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3B82F6;
+  pointer-events: none;
+}
+
+.filter-flag {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #EFF6FF;
+  color: #1D4ED8;
+  font-weight: 500;
+}
