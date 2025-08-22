@@ -1,6 +1,7 @@
 import * as React from "react";
 import Chart from "chart.js/auto";
 import BodyPortal from "@/components/charts/BodyPortal";
+import { highlightGroup } from "@/utils/highlight";
 import { laneForStatus, type LaneId } from "./lanes5";
 import { LANE_LABELS } from "./calendarMap";
 import type { Period } from "./types";
@@ -53,24 +54,6 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
     content: string;
   }>({ visible: false, x: 0, y: 0, content: '' });
   
-  // Function to handle slice hover and highlight matching status cards
-  function onSliceHover(groupKey?: 'todo'|'inprog'|'withclient'|'ready'|'done', colorHex?: string){
-    // clear all
-    document.querySelectorAll('.kpi-link').forEach(el=>{
-      el.classList.remove('is-hot');
-      (el as HTMLElement).style.removeProperty('--accent');
-    });
-
-    if(!groupKey) return; // mouseout
-
-    const target = document.querySelector<HTMLElement>(`.dashboardV2 .area--${groupKey} .kpi-link`)
-                || document.querySelector<HTMLElement>(`.dashboardV2 .area--${groupKey}`);
-    if (target){
-      if (colorHex) target.style.setProperty('--accent', colorHex);
-      target.classList.add('is-hot');
-    }
-  }
-
   // Build counts from periods
   const chartData = React.useMemo(() => {
       // group -> status -> count
@@ -170,7 +153,7 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
         onHover: (_e, els) => {
           if (!els.length) {
             setTooltip({ visible: false, x: 0, y: 0, content: '' });
-            onSliceHover(undefined); // Clear highlights
+            highlightGroup(); // Clear highlights
             return;
           }
           const el = els[0];
@@ -190,15 +173,15 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
           
           if (el.datasetIndex === 0) {
             const lane = groups[el.index];
-            const groupKey = LANE_TO_GROUP[lane] as 'todo'|'inprog'|'withclient'|'ready'|'done';
+            const groupKey = LANE_TO_GROUP[lane];
             const colorHex = LANE_COLORS[lane].bg;
-            onSliceHover(groupKey, colorHex);
+            highlightGroup(groupKey, colorHex);
           } else {
             const status = outerLabels[el.index];
             const lane = statusToGroup[status];
-            const groupKey = LANE_TO_GROUP[lane] as 'todo'|'inprog'|'withclient'|'ready'|'done';
+            const groupKey = LANE_TO_GROUP[lane];
             const colorHex = lighten(LANE_COLORS[lane].bg, 0.35);
-            onSliceHover(groupKey, colorHex);
+            highlightGroup(groupKey, colorHex);
           }
         },
         // Click inner ring to filter outer
