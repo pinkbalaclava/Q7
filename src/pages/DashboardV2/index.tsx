@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Grid3X3, List as ListIcon, Filter, MoreHorizontal } from 'lucide-react';
+import { Search, Grid3X3, List as ListIcon, Filter, MoreHorizontal, ClipboardList, Loader2, UserCheck, FileCheck2, CheckCircle2 } from 'lucide-react';
 import '@/styles/dashboardV2.css';
 import PersonaNav from '../../components/PersonaNav';
 import { NAV_OWNER } from '../../persona/nav';
@@ -21,7 +21,6 @@ import { HeaderBlock } from './HeaderBlock';
 import ClientView from './ClientView';
 import NestedStatusKanbanChart from './NestedStatusKanbanChart';
 import { CardKpi } from '@/components/ui/CardKpi';
-import { Users, TrendingUp, Inbox, Wrench, Clock8, Rocket, CheckCircle2 } from 'lucide-react';
 
 // Get unique assignees from demo data
 const getUniqueAssignees = (periods: Period[]): string[] => {
@@ -171,6 +170,15 @@ const DashboardV2: React.FC = () => {
     onTimeRate: kpiOnTimeRateMTD(visiblePeriods)
   }), [visiblePeriods]);
 
+  // Accent colors for status cards
+  const accents = {
+    todo:       "#F59E0B", // amber
+    inprog:     "#60A5FA", // blue
+    withclient: "#EC4899", // pink
+    ready:      "#7C3AED", // violet
+    done:       "#22C55E", // green
+  };
+
   // Prepare groups for status cards
   const groups = useMemo(() => {
     const laneGroups = LANES.reduce((acc, lane) => {
@@ -290,51 +298,61 @@ const DashboardV2: React.FC = () => {
             </section>
 
             {/* Right-side status cards, exact slots */}
-            <StatusCard 
-              title="To Do" 
-              total={g.todo.total} 
-              items={g.todo.items}
-              icon={<Inbox size={16} />}
-              accent="#f59e0b"
-              groupKey="todo"
-            />
+            <section className="card card--pad area--todo">
+              <StatusCard
+                title="To Do"
+                total={g.todo.total}
+                items={g.todo.items}
+                groupKey="todo"
+                accent={accents.todo}
+                icon={<ClipboardList size={16} strokeWidth={1.75} />}
+              />
+            </section>
 
-            <StatusCard 
-              title="In Progress" 
-              total={g.inprog.total} 
-              items={g.inprog.items}
-              icon={<Wrench size={16} />}
-              accent="#3b82f6"
-              groupKey="inprog"
-            />
+            <section className="card card--pad area--inprog">
+              <StatusCard
+                title="In Progress"
+                total={g.inprog.total}
+                items={g.inprog.items}
+                groupKey="inprog"
+                accent={accents.inprog}
+                icon={<Loader2 size={16} strokeWidth={1.75} />}
+              />
+            </section>
 
-            <StatusCard 
-              title="With Client" 
-              total={g.withclient.total} 
-              items={g.withclient.items}
-              icon={<Clock8 size={16} />}
-              accent="#db2777"
-              groupKey="withclient"
-            />
+            <section className="card card--pad area--withcl">
+              <StatusCard
+                title="With Client"
+                total={g.withclient.total}
+                items={g.withclient.items}
+                groupKey="withclient"
+                accent={accents.withclient}
+                icon={<UserCheck size={16} strokeWidth={1.75} />}
+              />
+            </section>
 
-            <StatusCard 
-              title="Ready for Review" 
-              total={g.ready.total} 
-              items={g.ready.items}
-              icon={<Rocket size={16} />}
-              accent="#6366f1"
-              groupKey="ready"
-            />
+            <section className="card card--pad area--ready">
+              <StatusCard
+                title="Ready for Review"
+                total={g.ready.total}
+                items={g.ready.items}
+                groupKey="ready"
+                accent={accents.ready}
+                icon={<FileCheck2 size={16} strokeWidth={1.75} />}
+              />
+            </section>
 
             {/* Completed (tall, spans both rows by area definition) */}
-            <StatusCard 
-              title="Completed" 
-              total={g.done.total} 
-              items={g.done.items}
-              icon={<CheckCircle2 size={16} />}
-              accent="#10b981"
-              groupKey="done"
-            />
+            <section className="card card--pad area--done">
+              <StatusCard
+                title="Completed"
+                total={g.done.total}
+                items={g.done.items}
+                groupKey="done"
+                accent={accents.done}
+                icon={<CheckCircle2 size={16} strokeWidth={1.75} />}
+              />
+            </section>
           </div>
             );
           })()}

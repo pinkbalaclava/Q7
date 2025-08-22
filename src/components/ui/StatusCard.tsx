@@ -11,8 +11,8 @@ export function StatusCard({
   groupKey:string;      // 'todo' | 'inprog' | 'withclient' | 'ready' | 'done'
 }) {
   return (
-    <section
-      className="card card--pad kpi-link"
+    <div
+      className="kpi-link"
       data-group={groupKey}
       style={
         { 
@@ -35,6 +35,6 @@ export function StatusCard({
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
