@@ -239,6 +239,7 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
   const [opened, setOpened] = useState<Period | null>(null);
   const [dragOverColumn, setDragOverColumn] = useState<LaneId | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [sortBy, setSortBy] = useState<'recency' | 'date'>('recency');
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const columnRefs = useRef<Record<LaneId, HTMLDivElement | null>>({});
 
@@ -264,13 +265,23 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
       return acc;
     }, {} as Record<LaneId, Period[]>);
     
-    // Always sort by due date - keep it simple
+    // Sort based on user preference
     Object.keys(grouped).forEach(laneId => {
-      grouped[laneId as LaneId].sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+      if (sortBy === 'date') {
+        // Sort by due date (earliest first)
+        grouped[laneId as LaneId].sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+      } else {
+        // Sort by recency - most recently updated first
+        grouped[laneId as LaneId].sort((a, b) => {
+          const aLastUpdate = a.comms?.[0]?.at || a.dueDate;
+          const bLastUpdate = b.comms?.[0]?.at || b.dueDate;
+          return new Date(bLastUpdate).getTime() - new Date(aLastUpdate).getTime();
+        });
+      }
     });
     
     return grouped;
-  }, [periods]);
+  }, [periods, sortBy]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {
@@ -422,8 +433,6 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
     const updatedPeriod: Period = {
       ...draggedPeriod,
       status: target as PeriodStatus,
-      // Set due date to current time to ensure it appears at top when sorted
-      dueDate: new Date().toISOString(),
       comms: [
         {
           at: new Date().toISOString(),
@@ -443,6 +452,24 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
 
   return (
     <>
+      {/* Sort Controls */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center space-x-2">
+          <label htmlFor="sort-select" className="text-sm font-medium text-gray-700">
+            Sort by:
+          </label>
+          <select
+            id="sort-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as 'recency' | 'date')}
+            className="px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+          >
+            <option value="recency">Recency (Most Recent First)</option>
+            <option value="date">Due Date (Earliest First)</option>
+          </select>
+        </div>
+      </div>
+
       <div className="grid gap-4 pb-4 w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5" style={{ minHeight: '900px' }}>
       {LANES.map(lane => {
         const lanePeriods = periodsByLane[lane.id] || [];
