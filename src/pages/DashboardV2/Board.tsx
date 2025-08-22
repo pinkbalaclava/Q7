@@ -243,6 +243,7 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
   const [draggedPeriod, setDraggedPeriod] = useState<Period | null>(null);
   const [pendingMove, setPendingMove] = useState<null | { period: Period; target: string }>(null);
   const [opened, setOpened] = useState<Period | null>(null);
+  const [dragOverColumn, setDragOverColumn] = useState<LaneId | null>(null);
 
   const handleOpen = (period: Period) => {
     onOpen(period);
@@ -348,15 +349,43 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
   const handleDragStart = (e: React.DragEvent, period: Period) => {
     setDraggedPeriod(period);
     e.dataTransfer.effectAllowed = 'move';
+    // Add dragging class to the card
+    const target = e.target as HTMLElement;
+    target.classList.add('is-dragging');
   };
 
   const handleDragEnd = () => {
+    // Clear drag state and remove all drag classes
     setDraggedPeriod(null);
+    setDragOverColumn(null);
+    // Clean up any drag styles
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.kanban__card').forEach(el => {
+        (el as HTMLElement).style.transform = '';
+        el.classList.remove('is-dragging');
+      });
+    });
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent, laneId: LaneId) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    setDragOverColumn(laneId);
+    
+    // Auto-scroll logic for long columns
+    const column = document.querySelector(`[data-col="${laneId}"] .kanban__scroller`) as HTMLElement;
+    if (!column) return;
+    
+    const { top, bottom } = column.getBoundingClientRect();
+    const margin = 80;
+    const clientY = e.clientY;
+    
+    if (clientY < top + margin) {
+      column.scrollBy({ top: -20, behavior: 'auto' });
+    }
+    if (clientY > bottom - margin) {
+      column.scrollBy({ top: 20, behavior: 'auto' });
+    }
   };
 
   const handleDrop = (e: React.DragEvent, targetLane: LaneId) => {
@@ -400,9 +429,10 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
         return (
           <div
             key={lane.id}
-            className="bg-gray-50 rounded-lg p-4 min-w-0 min-w-[280px] flex flex-col"
+            className="kanban__column bg-gray-50 rounded-lg p-4 min-w-0 min-w-[280px] flex flex-col relative overflow-visible"
             style={{ minHeight: '900px', height: 'max(900px, 100vh - 200px)' }}
-            onDragOver={handleDragOver}
+            data-col={lane.id}
+            onDragOver={(e) => handleDragOver(e, lane.id)}
             onDrop={(e) => handleDrop(e, lane.id)}
           >
             {/* Column Header */}
@@ -414,16 +444,16 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
             </div>
 
             {/* Column Content */}
-            <div className="space-y-3 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 pr-1">
+            <div className="kanban__scroller space-y-3 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 pr-1" style={{ maxHeight: '900px', minHeight: '900px' }}>
               {lanePeriods.map(period => (
                 <div
                   key={period.id}
+                  className={`kanban__card bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-move ${
+                    draggedPeriod?.id === period.id ? 'kanban__card--ghost' : ''
+                  }`}
                   draggable
                   onDragStart={(e) => handleDragStart(e, period)}
                   onDragEnd={handleDragEnd}
-                  className={`bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-move ${
-                    draggedPeriod?.id === period.id ? 'transform -rotate-12 scale-105 shadow-lg z-10' : ''
-                  }`}
                 >
                   {/* Compact Card Layout */}
                   <div className="space-y-2">
@@ -472,7 +502,9 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
                           </div>
                         )}
                       </div>
-                      <CombinedActionsMenu period={period} onChange={handleUpdate} onRequest={(target) => requestMove(period, target)} />
+                      <div className="card__actions-popover">
+                        <CombinedActionsMenu period={period} onChange={handleUpdate} onRequest={(target) => requestMove(period, target)} />
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -41,3 +41,36 @@ html {
 .scrollbar-thin::-webkit-scrollbar-track {
   background-color: transparent;
 }
+
+/* Kanban drag and drop styles */
+.kanban__card.is-dragging {
+  transform: rotate(-8deg) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  cursor: grabbing;
+}
+
+.kanban__card--ghost {
+  opacity: 0.3;
+  transform: none !important;
+}
+
+.kanban__column {
+  position: relative;
+  overflow: visible;
+}
+
+.kanban__scroller {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.2s;
+}
+
+.kanban__scroller:hover {
+  scrollbar-color: #d1d5db transparent;
+}
+
+.card__actions-popover {
+  position: relative;
+  z-index: 50;
+}
