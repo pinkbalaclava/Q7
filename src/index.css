@@ -125,3 +125,6 @@ html {
 .filter.is-filtered {
   padding-left: 4.5rem;
 }
+
+/* Import KPI styles */
+@import './styles/kpi.css';

@@ -1,0 +1,117 @@
+/* KPI Card Styles */
+.kpi-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: all 0.2s ease-in-out;
+}
+
+.kpi-card:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  transform: translateY(-2px);
+}
+
+/* Status Variants */
+.kpi-card.kpi-good {
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.kpi-card.kpi-warn {
+  background-color: #fefce8;
+  border-color: #fde047;
+}
+
+.kpi-card.kpi-bad {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+}
+
+/* KPI Grid Layout */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+/* Responsive Grid Breakpoints */
+@media (max-width: 640px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .kpi-grid > * {
+    grid-column: span 12;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .kpi-grid > * {
+    grid-column: span 6;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .kpi-grid > * {
+    grid-column: span 4;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1280px) {
+  .kpi-grid > * {
+    grid-column: span 3;
+  }
+}
+
+@media (min-width: 1281px) {
+  .kpi-grid > * {
+    grid-column: span 2;
+  }
+}
+
+/* Utility Classes for Manual Grid Spans */
+.kpi-span-1 { grid-column: span 1; }
+.kpi-span-2 { grid-column: span 2; }
+.kpi-span-3 { grid-column: span 3; }
+.kpi-span-4 { grid-column: span 4; }
+.kpi-span-6 { grid-column: span 6; }
+.kpi-span-12 { grid-column: span 12; }
+
+/* Responsive Utility Classes */
+@media (min-width: 640px) {
+  .sm\:kpi-span-1 { grid-column: span 1; }
+  .sm\:kpi-span-2 { grid-column: span 2; }
+  .sm\:kpi-span-3 { grid-column: span 3; }
+  .sm\:kpi-span-4 { grid-column: span 4; }
+  .sm\:kpi-span-6 { grid-column: span 6; }
+  .sm\:kpi-span-12 { grid-column: span 12; }
+}
+
+@media (min-width: 768px) {
+  .md\:kpi-span-1 { grid-column: span 1; }
+  .md\:kpi-span-2 { grid-column: span 2; }
+  .md\:kpi-span-3 { grid-column: span 3; }
+  .md\:kpi-span-4 { grid-column: span 4; }
+  .md\:kpi-span-6 { grid-column: span 6; }
+  .md\:kpi-span-12 { grid-column: span 12; }
+}
+
+@media (min-width: 1024px) {
+  .lg\:kpi-span-1 { grid-column: span 1; }
+  .lg\:kpi-span-2 { grid-column: span 2; }
+  .lg\:kpi-span-3 { grid-column: span 3; }
+  .lg\:kpi-span-4 { grid-column: span 4; }
+  .lg\:kpi-span-6 { grid-column: span 6; }
+  .lg\:kpi-span-12 { grid-column: span 12; }
+}
+
+@media (min-width: 1280px) {
+  .xl\:kpi-span-1 { grid-column: span 1; }
+  .xl\:kpi-span-2 { grid-column: span 2; }
+  .xl\:kpi-span-3 { grid-column: span 3; }
+  .xl\:kpi-span-4 { grid-column: span 4; }
+  .xl\:kpi-span-6 { grid-column: span 6; }
+  .xl\:kpi-span-12 { grid-column: span 12; }
+}
