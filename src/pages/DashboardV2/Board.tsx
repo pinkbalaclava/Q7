@@ -244,6 +244,9 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
   const [pendingMove, setPendingMove] = useState<null | { period: Period; target: string }>(null);
   const [opened, setOpened] = useState<Period | null>(null);
   const [dragOverColumn, setDragOverColumn] = useState<LaneId | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [justDragged, setJustDragged] = useState(false);
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const handleOpen = (period: Period) => {
     onOpen(period);
@@ -261,10 +264,22 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
   };
 
   // Group periods by lane
-  const periodsByLane = LANES.reduce((acc, lane) => {
-    acc[lane.id] = periods.filter(p => laneForStatus(p.status) === lane.id);
-    return acc;
-  }, {} as Record<LaneId, Period[]>);
+  const periodsByLane = useMemo(() => {
+    const grouped = LANES.reduce((acc, lane) => {
+      acc[lane.id] = periods.filter(p => laneForStatus(p.status) === lane.id);
+      return acc;
+    }, {} as Record<LaneId, Period[]>);
+    
+    // If we just dragged, don't auto-sort to preserve user's chosen position
+    if (!justDragged) {
+      // Sort by due date within each lane
+      Object.keys(grouped).forEach(laneId => {
+        grouped[laneId as LaneId].sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+      });
+    }
+    
+    return grouped;
+  }, [periods, justDragged]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {
@@ -349,28 +364,36 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
   const handleDragStart = (e: React.DragEvent, period: Period) => {
     setDraggedPeriod(period);
     e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', period.id);
     // Add dragging class to the card
-    const target = e.target as HTMLElement;
-    target.classList.add('is-dragging');
+    setTimeout(() => {
+      const target = e.target as HTMLElement;
+      target.classList.add('is-dragging');
+    }, 0);
   };
 
   const handleDragEnd = () => {
     // Clear drag state and remove all drag classes
     setDraggedPeriod(null);
     setDragOverColumn(null);
+    setDragOverIndex(null);
     // Clean up any drag styles
     requestAnimationFrame(() => {
       document.querySelectorAll('.kanban__card').forEach(el => {
         (el as HTMLElement).style.transform = '';
         el.classList.remove('is-dragging');
+        el.classList.remove('kanban__card--ghost');
       });
     });
   };
 
-  const handleDragOver = (e: React.DragEvent, laneId: LaneId) => {
+  const handleDragOver = (e: React.DragEvent, laneId: LaneId, index?: number) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
     setDragOverColumn(laneId);
+    if (typeof index === 'number') {
+      setDragOverIndex(index);
+    }
     
     // Auto-scroll logic for long columns
     const column = document.querySelector(`[data-col="${laneId}"] .kanban__scroller`) as HTMLElement;
@@ -388,7 +411,7 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
     }
   };
 
-  const handleDrop = (e: React.DragEvent, targetLane: LaneId) => {
+  const handleDrop = (e: React.DragEvent, targetLane: LaneId, dropIndex?: number) => {
     e.preventDefault();
     
     if (!draggedPeriod) return;
@@ -403,7 +426,11 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
       return; // nothing to do
     }
     
-    // Apply move directly without confirmation
+    // Mark that we just dragged to prevent auto-sorting
+    setJustDragged(true);
+    setTimeout(() => setJustDragged(false), 100);
+    
+    // Update the period with new status
     const updatedPeriod: Period = {
       ...draggedPeriod,
       status: target as PeriodStatus,
@@ -416,8 +443,17 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
         ...draggedPeriod.comms
       ]
     };
+    
     onUpdate(updatedPeriod);
     onToast(`Moved to ${target}`, 'success');
+    
+    // Ensure the dropped card is visible
+    requestAnimationFrame(() => {
+      const cardEl = cardRefs.current[draggedPeriod.id];
+      if (cardEl) {
+        cardEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    });
   };
 
   return (
@@ -444,16 +480,33 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
             </div>
 
             {/* Column Content */}
-            <div className="kanban__scroller space-y-3 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 pr-1" style={{ maxHeight: '900px', minHeight: '900px' }}>
-              {lanePeriods.map(period => (
+            <div 
+              className="kanban__scroller space-y-3 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 pr-1" 
+              style={{ maxHeight: '900px', minHeight: '900px' }}
+              onDragOver={(e) => handleDragOver(e, lane.id)}
+              onDrop={(e) => handleDrop(e, lane.id)}
+            >
+              {lanePeriods.map((period, index) => (
                 <div
                   key={period.id}
+                  ref={(el) => { cardRefs.current[period.id] = el; }}
                   className={`kanban__card bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-move ${
-                    draggedPeriod?.id === period.id ? 'kanban__card--ghost' : ''
+                    draggedPeriod?.id === period.id ? 'is-dragging' : ''
                   }`}
                   draggable
                   onDragStart={(e) => handleDragStart(e, period)}
                   onDragEnd={handleDragEnd}
+                  onDragOver={(e) => {
+                    e.stopPropagation();
+                    handleDragOver(e, lane.id, index);
+                  }}
+                  onDrop={(e) => {
+                    e.stopPropagation();
+                    handleDrop(e, lane.id, index);
+                  }}
+                  style={{
+                    opacity: 1, // Always full opacity for the actual card
+                  }}
                 >
                   {/* Compact Card Layout */}
                   <div className="space-y-2">
@@ -509,6 +562,19 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
                   </div>
                 </div>
               ))}
+              
+              {/* Drop zone at the end of the column */}
+              <div
+                className="min-h-[20px] w-full"
+                onDragOver={(e) => {
+                  e.stopPropagation();
+                  handleDragOver(e, lane.id, lanePeriods.length);
+                }}
+                onDrop={(e) => {
+                  e.stopPropagation();
+                  handleDrop(e, lane.id, lanePeriods.length);
+                }}
+              />
               
               {lanePeriods.length === 0 && (
                 <div className="text-center text-gray-500 text-sm py-8 flex-1 flex items-center justify-center">
