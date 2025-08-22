@@ -50,7 +50,7 @@ const DashboardV2: React.FC = () => {
   const [status, setStatus] = useState<"ALL" | PeriodStatus>("ALL");
   const [assignee, setAssignee] = useState<"ALL" | string>("ALL");
   const [search, setSearch] = useState("");
-  const [view, setView] = useState<"board" | "list" | "calendar">("board");
+  const [view, setView] = useState<"board" | "list" | "calendar">("list");
   const [periods, setPeriods] = useState<Period[]>(demoPeriods);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -348,19 +348,6 @@ const DashboardV2: React.FC = () => {
                 {/* View Toggle */}
                 <div className="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
                 <button
-                  onClick={() => setView("board")}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    view === "board"
-                      ? "bg-white text-gray-900 shadow-sm"
-                      : "text-gray-600 hover:text-gray-900"
-                  }`}
-                  aria-label="Switch to board view"
-                  aria-pressed={view === "board"}
-                >
-                  <Grid3X3 className="w-4 h-4" />
-                  <span>Board</span>
-                </button>
-                <button
                   onClick={() => setView("list")}
                   className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     view === "list"
@@ -372,6 +359,19 @@ const DashboardV2: React.FC = () => {
                 >
                   <ListIcon className="w-4 h-4" />
                   <span>List</span>
+                </button>
+                <button
+                  onClick={() => setView("board")}
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    view === "board"
+                      ? "bg-white text-gray-900 shadow-sm"
+                      : "text-gray-600 hover:text-gray-900"
+                  }`}
+                  aria-label="Switch to board view"
+                  aria-pressed={view === "board"}
+                >
+                  <Grid3X3 className="w-4 h-4" />
+                  <span>Board</span>
                 </button>
                 <button
                   onClick={() => setView("calendar")}
@@ -404,21 +404,7 @@ const DashboardV2: React.FC = () => {
           </div>
 
           {/* Main Content Area */}
-          {view === "board" ? (
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <Board
-                periods={visiblePeriods}
-                serviceFilter={service === "ALL" ? undefined : service}
-                onOpen={(clientId) => {
-                  // Find the period that was clicked to get service context
-                  const period = visiblePeriods.find(p => p.clientId === clientId);
-                  handleOpenClient(clientId, period?.service, period?.id);
-                }}
-                onUpdate={handleUpdatePeriod}
-                onToast={showToast}
-              />
-            </div>
-          ) : view === "list" ? (
+          {view === "list" ? (
             <List
               periods={visiblePeriods}
               serviceFilter={service === "ALL" ? undefined : service}
@@ -430,6 +416,16 @@ const DashboardV2: React.FC = () => {
               onUpdate={handleUpdatePeriod}
               onToast={showToast}
             />
+          ) : view === "board" ? (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <Board
+                periods={visiblePeriods}
+                serviceFilter={service === "ALL" ? undefined : service}
+                onOpen={handleOpenClient}
+                onUpdate={handleUpdatePeriod}
+                onToast={showToast}
+              />
+            </div>
           ) : (
             <CalendarView
               periods={visiblePeriods}

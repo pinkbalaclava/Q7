@@ -4,18 +4,14 @@ import {
   Calendar, 
   DollarSign, 
   User, 
-  Mail, 
-  Upload, 
-  CheckCircle2,
   AlertTriangle,
-  ExternalLink,
-  Eye
+  MoreHorizontal
 } from 'lucide-react';
 import type { Period, Service } from './types';
 import { nextAllowedTransitions, daysUntil } from './status';
 import { StatusPill } from './StatusPill';
 import { MoveMenu } from './MoveMenu';
-import { LogActionSheet } from './LogActionSheet';
+import { ContextualActionsMenu } from './ContextualActionsMenu';
 import { ServiceBadge } from './ServiceBadge';
 import PeriodModal from './PeriodModal';
 
@@ -207,7 +203,7 @@ const List: React.FC<ListProps> = ({ periods, serviceFilter, onOpen, onUpdate, o
           </thead>
           <tbody className="divide-y divide-gray-200">
             {periods.map((period) => (
-              <tr key={period.id} className="hover:bg-gray-50 transition-colors">
+              <tr key={period.id} className="group hover:bg-gray-50 transition-colors">
                 {/* Client */}
                 <td className="p-4">
                   <button
@@ -290,7 +286,7 @@ const List: React.FC<ListProps> = ({ periods, serviceFilter, onOpen, onUpdate, o
                 {/* Actions */}
                 <td className="p-4">
                   <div className="flex items-center justify-end">
-                    <LogActionSheet period={period} onChange={handleChange} />
+                    <ContextualActionsMenu period={period} onChange={handleChange} />
                   </div>
                 </td>
               </tr>
