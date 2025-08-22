@@ -5,3 +5,39 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* Custom scrollbar styles for Kanban columns */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+  border-radius: 4px;
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.hover\:scrollbar-thumb-gray-400:hover::-webkit-scrollbar-thumb {
+  background-color: #9ca3af;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.scrollbar-thin:hover::-webkit-scrollbar-thumb {
+  background-color: #d1d5db;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background-color: transparent;
+}

@@ -374,19 +374,34 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
       return; // nothing to do
     }
     
-    requestMove(draggedPeriod, target); // open confirm
+    // Apply move directly without confirmation
+    const updatedPeriod: Period = {
+      ...draggedPeriod,
+      status: target as PeriodStatus,
+      comms: [
+        {
+          at: new Date().toISOString(),
+          type: 'note',
+          summary: `Status changed from "${draggedPeriod.status}" to "${target}"`
+        },
+        ...draggedPeriod.comms
+      ]
+    };
+    onUpdate(updatedPeriod);
+    onToast(`Moved to ${target}`, 'success');
   };
 
   return (
     <>
-      <div className="grid gap-4 pb-4 w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div className="grid gap-4 pb-4 w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5" style={{ minHeight: '900px' }}>
       {LANES.map(lane => {
         const lanePeriods = periodsByLane[lane.id] || [];
         
         return (
           <div
             key={lane.id}
-            className="bg-gray-50 rounded-lg p-4 min-w-0 min-w-[280px]"
+            className="bg-gray-50 rounded-lg p-4 min-w-0 min-w-[280px] flex flex-col"
+            style={{ minHeight: '900px', height: 'max(900px, 100vh - 200px)' }}
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, lane.id)}
           >
@@ -399,14 +414,16 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
             </div>
 
             {/* Column Content */}
-            <div className="space-y-3 min-h-[200px]">
+            <div className="space-y-3 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 pr-1">
               {lanePeriods.map(period => (
                 <div
                   key={period.id}
                   draggable
                   onDragStart={(e) => handleDragStart(e, period)}
                   onDragEnd={handleDragEnd}
-                  className="bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow cursor-move"
+                  className={`bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all duration-200 cursor-move ${
+                    draggedPeriod?.id === period.id ? 'transform -rotate-12 scale-105 shadow-lg z-10' : ''
+                  }`}
                 >
                   {/* Compact Card Layout */}
                   <div className="space-y-2">
@@ -462,7 +479,7 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
               ))}
               
               {lanePeriods.length === 0 && (
-                <div className="text-center text-gray-500 text-sm py-8">
+                <div className="text-center text-gray-500 text-sm py-8 flex-1 flex items-center justify-center">
                   No periods in this lane
                 </div>
               )}
@@ -472,38 +489,6 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
       })}
       </div>
 
-      {/* Confirmation Dialog */}
-      {pendingMove && (
-        <>
-          {/* Backdrop */}
-          <div className="fixed inset-0 z-50 bg-black/50" onClick={() => setPendingMove(null)} />
-          
-          {/* Dialog */}
-          <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-lg border border-gray-200 p-6">
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Confirm Status Change</h3>
-              <p className="text-sm text-gray-600 mt-2">
-                Move "{pendingMove.period.clientName}" from <strong>{pendingMove.period.status}</strong> to <strong>{pendingMove.target}</strong>?
-              </p>
-            </div>
-            
-            <div className="flex items-center justify-end space-x-3">
-              <button
-                onClick={() => setPendingMove(null)}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={applyPendingMove}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-              >
-                Confirm
-              </button>
-            </div>
-          </div>
-        </>
-      )}
 
       {/* Period Modal */}
       <PeriodModal 
