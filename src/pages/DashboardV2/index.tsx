@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Grid3X3, List as ListIcon, Filter, MoreHorizontal } from 'lucide-react';
 import PersonaNav from '../../components/PersonaNav';
 import { NAV_OWNER } from '../../persona/nav';
+import { TopKPIs } from '../../sections/TopKPIs';
 import { demoPeriods } from './demo-data';
 import type { Period, Service, PeriodStatus } from './types';
 import TopStats from './TopStats';
@@ -222,6 +223,12 @@ const DashboardV2: React.FC = () => {
           </div>
 
           {/* Analytics Strip */}
+          <TopKPIs 
+            periods={visiblePeriods} 
+            serviceFilter={service === "ALL" ? undefined : service}
+            key={refreshKey} 
+          />
+          
           <TopStats 
             periods={visiblePeriods} 
             serviceFilter={service === "ALL" ? undefined : service}
