@@ -266,6 +266,18 @@ const DashboardV2: React.FC = () => {
           </div>
 
           {/* DashboardV2 Grid Layout */}
+          {/* Normalize groups to fixed keys */}
+          {(() => {
+            const groupsByKey = {
+              todo:        groups.find(g=>g.key==='TODO')        ?? {total:0, items:[]},
+              inprog:      groups.find(g=>g.key==='INPROG')      ?? {total:0, items:[]},
+              withclient:  groups.find(g=>g.key==='WITHCLIENT')  ?? {total:0, items:[]},
+              ready:       groups.find(g=>g.key==='READY')       ?? {total:0, items:[]},
+              done:        groups.find(g=>g.key==='DONE')        ?? {total:0, items:[]},
+            };
+            const g = groupsByKey;
+            
+            return (
           <div className="dashboardV2 mb-8">
             {/* KPI 1 */}
             <section className="card card--pad area--kpi1">
@@ -287,26 +299,28 @@ const DashboardV2: React.FC = () => {
 
             {/* Right-side status cards, exact slots */}
             <section className="card card--pad area--todo">
-              <StatusCard title="To Do" total={groups.todo?.total || 0} items={groups.todo?.items || []} />
+              <StatusCard title="To Do" total={g.todo.total} items={g.todo.items} />
             </section>
 
             <section className="card card--pad area--inprog">
-              <StatusCard title="In Progress" total={groups.inprog?.total || 0} items={groups.inprog?.items || []} />
+              <StatusCard title="In Progress" total={g.inprog.total} items={g.inprog.items} />
             </section>
 
             <section className="card card--pad area--withcl">
-              <StatusCard title="With Client" total={groups.withclient?.total || 0} items={groups.withclient?.items || []} />
+              <StatusCard title="With Client" total={g.withclient.total} items={g.withclient.items} />
             </section>
 
             <section className="card card--pad area--ready">
-              <StatusCard title="Ready for Review" total={groups.ready?.total || 0} items={groups.ready?.items || []} />
+              <StatusCard title="Ready for Review" total={g.ready.total} items={g.ready.items} />
             </section>
 
             {/* Completed (tall, spans both rows by area definition) */}
             <section className="card card--pad area--done">
-              <StatusCard title="Completed" total={groups.done?.total || 0} items={groups.done?.items || []} />
+              <StatusCard title="Completed" total={g.done.total} items={g.done.items} />
             </section>
           </div>
+            );
+          })()}
 
           {/* Filter Bar */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6 sticky top-4 z-20">
