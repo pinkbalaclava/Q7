@@ -137,16 +137,36 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
         onHover: (_e, els) => {
           if (!els.length) {
             setHoveredLane(null);
+            // Clear all highlights
+            document.querySelectorAll('.kpi-card.is-hot').forEach(el => {
+              el.classList.remove('is-hot');
+            });
             return;
           }
           const el = els[0];
           if (el.datasetIndex === 0) {
             const g = groups[el.index];
             setHoveredLane(g);
+            // Highlight matching card
+            document.querySelectorAll('.kpi-card').forEach(card => {
+              card.classList.remove('is-hot');
+            });
+            const matchingCard = document.querySelector(`[data-group="${g}"]`);
+            if (matchingCard) {
+              matchingCard.classList.add('is-hot');
+            }
           } else {
             const s = outerLabels[el.index];
             const g = statusToGroup[s];
             setHoveredLane(g);
+            // Highlight matching card
+            document.querySelectorAll('.kpi-card').forEach(card => {
+              card.classList.remove('is-hot');
+            });
+            const matchingCard = document.querySelector(`[data-group="${g}"]`);
+            if (matchingCard) {
+              matchingCard.classList.add('is-hot');
+            }
           }
         },
         // Click inner ring to filter outer

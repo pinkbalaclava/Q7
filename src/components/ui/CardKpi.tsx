@@ -8,6 +8,7 @@ interface CardKpiProps {
   icon?: React.ReactNode;
   status?: "neutral" | "good" | "warn" | "bad";
   className?: string;
+  'data-group'?: string;
 }
 
 export function CardKpi({ 
@@ -16,7 +17,8 @@ export function CardKpi({
   subtitle, 
   icon, 
   status = "neutral",
-  className 
+  className,
+  ...props
 }: CardKpiProps) {
   const statusClasses = {
     neutral: "bg-white border-gray-200",
@@ -31,6 +33,8 @@ export function CardKpi({
       statusClasses[status],
       className
     )}>
+      {...props}
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-medium text-gray-600">{title}</h3>

@@ -12,6 +12,13 @@
   transform: translateY(-2px);
 }
 
+/* Hot state for donut interaction */
+.kpi-card.is-hot {
+  box-shadow: 0 10px 26px rgba(37,99,235,.16);
+  transform: translateY(-2px);
+  border-color: #dbeafe;
+}
+
 /* Status Variants */
 .kpi-card.kpi-good {
   background-color: #f0fdf4;

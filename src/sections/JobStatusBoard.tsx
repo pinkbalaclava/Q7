@@ -33,6 +33,8 @@ export function JobStatusBoard({ groups, donut }: JobStatusBoardProps) {
             key={group.key}
             title={group.name}
             value={group.total}
+            className={`kpi-card`}
+            data-group={group.key}
             subtitle={
               group.items.length > 0 ? (
                 <div className="space-y-1">
