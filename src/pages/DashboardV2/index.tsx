@@ -269,11 +269,11 @@ const DashboardV2: React.FC = () => {
           {/* Normalize groups to fixed keys */}
           {(() => {
             const groupsByKey = {
-              todo:        groups.find(g=>g.key==='TODO')        ?? {total:0, items:[]},
-              inprog:      groups.find(g=>g.key==='INPROG')      ?? {total:0, items:[]},
-              withclient:  groups.find(g=>g.key==='WITHCLIENT')  ?? {total:0, items:[]},
-              ready:       groups.find(g=>g.key==='READY')       ?? {total:0, items:[]},
-              done:        groups.find(g=>g.key==='DONE')        ?? {total:0, items:[]},
+              todo:        groups.todo        ?? {total:0, items:[]},
+              inprog:      groups.inprog      ?? {total:0, items:[]},
+              withclient:  groups.withclient  ?? {total:0, items:[]},
+              ready:       groups.ready       ?? {total:0, items:[]},
+              done:        groups.done        ?? {total:0, items:[]},
             };
             const g = groupsByKey;
             
