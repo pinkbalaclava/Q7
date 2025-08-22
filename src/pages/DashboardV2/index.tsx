@@ -209,10 +209,6 @@ const DashboardV2: React.FC = () => {
               />
               <span className="text-xl font-semibold text-gray-900">TAX & ACCOUNTANCY</span>
             </div>
-            {/* Nav chips row */}
-            <div className="flex flex-wrap items-center gap-2 md:gap-3 justify-start">
-              <PersonaNav items={NAV_OWNER} />
-            </div>
           </HeaderBlock>
         </WideContainer>
       </div>
