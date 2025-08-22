@@ -99,3 +99,15 @@
   outline: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
   outline-offset: 2px;
 }
+
+.kpi-link.is-hot {
+  box-shadow:0 10px 24px rgba(0,0,0,.12);
+  border-color:var(--accent);
+  background:linear-gradient(180deg,
+    color-mix(in srgb,var(--accent) 10%,#fff) 0%,
+    #fff 70%);
+}
+.kpi-link.is-hot .sc__hdr,
+.kpi-link.is-hot .sc__meta {
+  background:none;
+}
