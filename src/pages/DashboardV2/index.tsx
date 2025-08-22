@@ -298,7 +298,7 @@ const DashboardV2: React.FC = () => {
             </section>
 
             {/* Right-side status cards, exact slots */}
-            <section className="card card--pad area--todo">
+            <section className="card card--pad area--todo" data-group="todo">
               <StatusCard
                 title="To Do"
                 total={g.todo.total}
@@ -309,7 +309,7 @@ const DashboardV2: React.FC = () => {
               />
             </section>
 
-            <section className="card card--pad area--inprog">
+            <section className="card card--pad area--inprog" data-group="inprog">
               <StatusCard
                 title="In Progress"
                 total={g.inprog.total}
@@ -320,7 +320,7 @@ const DashboardV2: React.FC = () => {
               />
             </section>
 
-            <section className="card card--pad area--withcl">
+            <section className="card card--pad area--withcl" data-group="withclient">
               <StatusCard
                 title="With Client"
                 total={g.withclient.total}
@@ -331,7 +331,7 @@ const DashboardV2: React.FC = () => {
               />
             </section>
 
-            <section className="card card--pad area--ready">
+            <section className="card card--pad area--ready" data-group="ready">
               <StatusCard
                 title="Ready for Review"
                 total={g.ready.total}
@@ -343,7 +343,7 @@ const DashboardV2: React.FC = () => {
             </section>
 
             {/* Completed (tall, spans both rows by area definition) */}
-            <section className="card card--pad area--done">
+            <section className="card card--pad area--done" data-group="done">
               <StatusCard
                 title="Completed"
                 total={g.done.total}
