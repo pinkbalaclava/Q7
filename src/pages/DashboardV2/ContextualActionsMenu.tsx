@@ -87,8 +87,7 @@ export function ContextualActionsMenu({ period, onChange }: Props) {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        onMouseEnter={() => setOpen(true)}
-        className="p-2 hover:bg-gray-100 rounded-full transition-colors opacity-0 group-hover:opacity-100"
+        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
         aria-label="Actions menu"
       >
         <MoreHorizontal className="w-4 h-4 text-gray-600" />
@@ -100,7 +99,6 @@ export function ContextualActionsMenu({ period, onChange }: Props) {
           <div 
             className="fixed inset-0 z-40" 
             onClick={() => setOpen(false)}
-            onMouseLeave={() => setOpen(false)}
           />
           
           {/* Menu */}
