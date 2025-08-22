@@ -129,3 +129,4 @@ html {
 /* Import KPI styles */
 @import './styles/kpi.css';
 @import './styles/jobstatus.css';
+@import './styles/dashboardV2.css';

@@ -1,0 +1,55 @@
+/* DashboardV2 Layout Styles */
+.dashboardV2 {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  grid-template-areas:
+    "kpi1 kpi2 kpi2 kpi2"
+    "donut todo inprog completed"
+    "donut withclient ready completed";
+}
+
+/* Areas */
+.area--kpi1      { grid-area: kpi1; }
+.area--kpi2      { grid-area: kpi2; }
+.area--donut     { grid-area: donut; min-height: 360px; }
+.area--todo      { grid-area: todo; }
+.area--inprog    { grid-area: inprog; }
+.area--withcl    { grid-area: withclient; }
+.area--ready     { grid-area: ready; }
+.area--done      { grid-area: completed; }
+
+/* Cards (shared look) */
+.card {
+  background: #fff;
+  border: 1px solid #eceff3;
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+}
+
+.card--pad {
+  padding: 16px;
+}
+
+/* Hover/lift (light mode) */
+.card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(16, 24, 40, .08);
+  transition: all .15s ease;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .dashboardV2 {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "kpi1"
+      "kpi2"
+      "donut"
+      "todo"
+      "inprog"
+      "withclient"
+      "ready"
+      "completed";
+  }
+}
