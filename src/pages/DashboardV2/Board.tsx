@@ -324,18 +324,14 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
   // When dropping into laneId, pick a target exact status that matches BOTH the lane and allowed transitions (forward OR back)
   const pickTargetStatusForDrop = (period: Period, laneId: LaneId): string | null => {
     const laneOpts = laneStatuses(period.service, laneId);
-    const forward = nextAllowedTransitions(period.service, period.status);
-    const back = prevAllowedTransitions(period.service, period.status);
-    const allowed = new Set<string>([...forward, ...back]);
     
-    // Prefer an allowed option that belongs to the lane
-    const candidate = laneOpts.find(s => allowed.has(s));
-    if (candidate) return candidate;
+    // Allow dropping into any lane - pick the first (default) status for that lane and service
+    if (laneOpts.length > 0) {
+      return laneOpts[0]; // Return the first/default status for this lane
+    }
     
-    // If the period is already in a lane status that matches the lane, allow 'no-op' (return same)
-    if (laneOpts.includes(period.status)) return period.status;
-    
-    return null; // not allowed
+    // Fallback to current status if no valid options (shouldn't happen)
+    return period.status;
   };
 
   const getServicePillColor = (service: Service) => {
