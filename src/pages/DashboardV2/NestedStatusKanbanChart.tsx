@@ -227,7 +227,7 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
         <p className="text-sm text-gray-600">Inner ring = Kanban groups • Outer ring = detailed statuses. Click a group to filter.</p>
       </div>
       <div className="p-6">
-        <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
+        <div className="flex justify-center">
           {/* Chart */}
           <div className="relative mx-auto" style={{ width: 400, height: 400 }}>
             <canvas ref={canvasRef} />
@@ -238,41 +238,6 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
                 <div className="text-xs text-gray-600">Total jobs</div>
               </div>
             </div>
-          </div>
-
-          {/* Lane Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
-            {(["TODO","INPROG","WITHCLIENT","READY","DONE"] as LaneId[]).map((lane) => (
-              <div key={lane} className={`rounded-lg border p-4 transition-all duration-200 ${
-                hoveredLane === lane 
-                  ? 'border-gray-300 shadow-md bg-gray-50' 
-                  : 'border-gray-200'
-              }`}>
-                <div className="flex items-center gap-3 mb-3">
-                  <div
-                    className="h-4 w-4 rounded-full flex-shrink-0" 
-                    style={{ backgroundColor: LANE_COLORS[lane].bg, border: `1px solid ${LANE_COLORS[lane].border}` }} 
-                  />
-                  <div className="flex-1">
-                    <div className="text-sm font-semibold text-gray-900">{LANE_LABELS[lane]}</div>
-                    <div className="text-lg font-bold text-gray-900">{legendGroups.gTotals[lane] ?? 0}</div>
-                  </div>
-                </div>
-                {(legendGroups.byGroup[lane] || []).length > 0 && (
-                  <div className="space-y-1">
-                    {(legendGroups.byGroup[lane] || []).map((row) => (
-                      <div key={row.status} className="flex items-center justify-between text-xs text-gray-600">
-                        <span className="truncate">{row.status}</span>
-                        <span className="tabular-nums font-medium ml-2">{row.count}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {(legendGroups.byGroup[lane] || []).length === 0 && (
-                  <div className="text-xs text-gray-400 italic">No items</div>
-                )}
-              </div>
-            ))}
           </div>
         </div>
       </div>
