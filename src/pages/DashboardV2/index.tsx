@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Grid3X3, List as ListIcon, Filter, MoreHorizontal } from 'lucide-react';
+import '@/styles/dashboardV2.css';
 import PersonaNav from '../../components/PersonaNav';
 import { NAV_OWNER } from '../../persona/nav';
-import { TopKPIs } from '../../sections/TopKPIs';
 import { demoPeriods } from './demo-data';
 import type { Period, Service, PeriodStatus } from './types';
+import { 
+  kpiActiveClients,
+  kpiOnTimeRateMTD
+} from './metrics';
+import { laneForStatus, LANES } from './lanes5';
 import TopStats from './TopStats';
 import Board from './Board';
 import List from './List';
@@ -12,6 +17,9 @@ import CalendarView from './CalendarView';
 import { WideContainer } from './WideContainer';
 import { HeaderBlock } from './HeaderBlock';
 import ClientView from './ClientView';
+import NestedStatusKanbanChart from './NestedStatusKanbanChart';
+import { CardKpi } from '@/components/ui/CardKpi';
+import { Users, TrendingUp } from 'lucide-react';
 
 // Get unique assignees from demo data
 const getUniqueAssignees = (periods: Period[]): string[] => {
@@ -154,6 +162,39 @@ const DashboardV2: React.FC = () => {
 
   // Get valid statuses for current service
   const validStatuses = useMemo(() => getValidStatuses(service), [service]);
+
+  // Calculate stats for KPIs
+  const stats = useMemo(() => ({
+    activeClients: kpiActiveClients(visiblePeriods),
+    onTimeRate: kpiOnTimeRateMTD(visiblePeriods)
+  }), [visiblePeriods]);
+
+  // Prepare groups for status cards
+  const groups = useMemo(() => {
+    const laneGroups = LANES.reduce((acc, lane) => {
+      const lanePeriods = visiblePeriods.filter(p => laneForStatus(p.status) === lane.id);
+      
+      // Get status breakdown for this lane
+      const statusCounts = new Map<string, number>();
+      lanePeriods.forEach(period => {
+        const count = statusCounts.get(period.status) || 0;
+        statusCounts.set(period.status, count + 1);
+      });
+      
+      const items = Array.from(statusCounts.entries())
+        .map(([status, count]) => ({ label: status, count }))
+        .sort((a, b) => b.count - a.count);
+      
+      acc[lane.id.toLowerCase()] = {
+        total: lanePeriods.length,
+        items
+      };
+      
+      return acc;
+    }, {} as Record<string, { total: number; items: Array<{ label: string; count: number }> }>);
+    
+    return laneGroups;
+  }, [visiblePeriods]);
 
   // Toast management
   const showToast = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
