@@ -238,9 +238,15 @@ const DashboardV2: React.FC = () => {
   };
 
   // Helper function to get accent color for a group key
-  const getAccentForKey = (key: string): string => {
-    return accents[key as keyof typeof accents] || "#6B7280";
-  };
+  function getAccentForKey(k: string) {
+    return {
+      todo: "#F59E0B",
+      inprog: "#60A5FA", 
+      withclient: "#EC4899",
+      ready: "#7C3AED",
+      done: "#22C55E"
+    }[k];
+  }
 
   // Add hover interactions to status cards
   useEffect(() => {
