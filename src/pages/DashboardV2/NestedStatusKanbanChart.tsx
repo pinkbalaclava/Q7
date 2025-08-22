@@ -14,6 +14,15 @@ const LANE_COLORS: Record<LaneId, { bg: string; border: string; text: string }> 
   DONE:       { bg: "#10b981", border: "#059669", text: "#064e3b" },   // emerald
 };
 
+// Map lane IDs to group keys for status cards
+const LANE_TO_GROUP: Record<LaneId, string> = {
+  TODO: 'todo',
+  INPROG: 'inprog', 
+  WITHCLIENT: 'withclient',
+  READY: 'ready',
+  DONE: 'done'
+};
+
 // Lighter shade for outer wedges
 function lighten(hex: string, amt = 0.35) {
   const c = hex.replace("#", "");
@@ -37,7 +46,6 @@ const STATUS_ORDER = [
 type Props = { periods: Period[] };
 
 export default function NestedStatusKanbanChart({ periods }: Props) {
-  const [hoveredLane, setHoveredLane] = React.useState<LaneId | null>(null);
   const [tooltip, setTooltip] = React.useState<{
     visible: boolean;
     x: number;
@@ -45,6 +53,24 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
     content: string;
   }>({ visible: false, x: 0, y: 0, content: '' });
   
+  // Function to handle slice hover and highlight matching status cards
+  function onSliceHover(groupKey?: 'todo'|'inprog'|'withclient'|'ready'|'done', colorHex?: string){
+    // clear all
+    document.querySelectorAll('.kpi-link').forEach(el=>{
+      el.classList.remove('is-hot');
+      (el as HTMLElement).style.removeProperty('--accent');
+    });
+
+    if(!groupKey) return; // mouseout
+
+    const target = document.querySelector<HTMLElement>(`.dashboardV2 .area--${groupKey} .kpi-link`)
+                || document.querySelector<HTMLElement>(`.dashboardV2 .area--${groupKey}`);
+    if (target){
+      if (colorHex) target.style.setProperty('--accent', colorHex);
+      target.classList.add('is-hot');
+    }
+  }
+
   // Build counts from periods
   const chartData = React.useMemo(() => {
       // group -> status -> count
@@ -143,12 +169,8 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
         },
         onHover: (_e, els) => {
           if (!els.length) {
-            setHoveredLane(null);
             setTooltip({ visible: false, x: 0, y: 0, content: '' });
-            // Clear all highlights
-            document.querySelectorAll('.kpi-link').forEach(el => {
-              el.classList.remove('is-hot');
-            });
+            onSliceHover(undefined); // Clear highlights
             return;
           }
           const el = els[0];
@@ -167,28 +189,16 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
           }
           
           if (el.datasetIndex === 0) {
-            const g = groups[el.index];
-            setHoveredLane(g);
-            // Highlight matching card
-            document.querySelectorAll('.kpi-link').forEach(card => {
-              card.classList.remove('is-hot');
-            });
-            const matchingCard = document.querySelector(`.area--${g.toLowerCase()}`);
-            if (matchingCard) {
-              matchingCard.classList.add('is-hot');
-            }
+            const lane = groups[el.index];
+            const groupKey = LANE_TO_GROUP[lane] as 'todo'|'inprog'|'withclient'|'ready'|'done';
+            const colorHex = LANE_COLORS[lane].bg;
+            onSliceHover(groupKey, colorHex);
           } else {
-            const s = outerLabels[el.index];
-            const g = statusToGroup[s];
-            setHoveredLane(g);
-            // Highlight matching card
-            document.querySelectorAll('.kpi-link').forEach(card => {
-              card.classList.remove('is-hot');
-            });
-            const matchingCard = document.querySelector(`.area--${g.toLowerCase()}`);
-            if (matchingCard) {
-              matchingCard.classList.add('is-hot');
-            }
+            const status = outerLabels[el.index];
+            const lane = statusToGroup[status];
+            const groupKey = LANE_TO_GROUP[lane] as 'todo'|'inprog'|'withclient'|'ready'|'done';
+            const colorHex = lighten(LANE_COLORS[lane].bg, 0.35);
+            onSliceHover(groupKey, colorHex);
           }
         },
         // Click inner ring to filter outer
