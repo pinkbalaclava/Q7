@@ -10,7 +10,7 @@ export function WeekStrip({
 }: {
   date: Date;                 // any date within the week to show
   events: CalEvent[];         // already filtered
-  onSelect(ev: CalEvent): void;
+  onSelect(ev: any): void;    // matches CalendarView signature
 }) {
   const start = React.useMemo(() => startOfWeek(date, { weekStartsOn: 1 }), [date]);
   const days = React.useMemo(() => Array.from({ length: 7 }, (_, i) => addDays(start, i)), [start]);

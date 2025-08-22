@@ -4,7 +4,6 @@ import { format, parse, startOfWeek, getDay, addDays } from "date-fns";
 import { enGB } from "date-fns/locale";
 import { periodsToEvents, LANE_COLORS, LANE_LABELS, CalEvent } from "./calendarMap";
 import type { Period } from "./types";
-import PeriodModal from "./PeriodModal";
 import { WeekStrip } from "./WeekStrip";
 import { Button } from "@/components/ui/button";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -21,14 +20,15 @@ const localizer = dateFnsLocalizer({
 export default function CalendarView({
   periods,
   onUpdate,
+  onOpen,
 }: {
   periods: Period[];              // filtered periods (respecting Service, Status, Assignee, Search)
   onUpdate(next: Period): void;   // updater to keep KPIs in sync
+  onOpen(period: Period): void;   // open client view
 }) {
   const events = React.useMemo(() => periodsToEvents(periods), [periods]);
   const [view, setView] = React.useState<"month"|"week">("month");
   const [date, setDate] = React.useState<Date>(new Date());
-  const [opened, setOpened] = React.useState<Period|null>(null);
 
   const eventStyleGetter = (event: CalEvent) => {
     const c = LANE_COLORS[event.lane];
@@ -44,9 +44,10 @@ export default function CalendarView({
   };
 
   function onSelectEvent(ev: any) {
-    const id = ev.id ?? ev?.event?.id ?? ev?.resourceId ?? ev?.periodId;
-    const p = periods.find(x => x.id === ev.id);
-    if (p) setOpened(p);
+    const period = periods.find(p => p.id === ev.id);
+    if (period) {
+      onOpen(period);
+    }
   }
 
   return (
@@ -155,16 +156,6 @@ export default function CalendarView({
         )}
       </div>
 
-      {/* Period modal reuse */}
-      <PeriodModal
-        open={!!opened}
-        period={opened}
-        onClose={() => setOpened(null)}
-        onUpdate={(next) => { 
-          onUpdate(next); 
-          if (opened?.id === next.id) setOpened(next); 
-        }}
-      />
     </div>
   );
 }

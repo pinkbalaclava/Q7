@@ -605,6 +605,7 @@ const DashboardV2: React.FC = () => {
             <CalendarView
               periods={visiblePeriods}
               onUpdate={handleUpdatePeriod}
+              onOpen={handleOpenClient}
             />
           )}
         </WideContainer>
