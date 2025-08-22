@@ -44,7 +44,8 @@ html {
 
 /* Kanban drag and drop styles */
 .kanban__card {
-  transition: box-shadow .15s ease, transform .15s ease;
+  transition: transform .15s ease, box-shadow .15s ease;
+  will-change: transform;
 }
 
 .kanban__card.is-dragging {

@@ -28,6 +28,16 @@ import { MoveMenu } from './MoveMenu';
 import { ServiceBadge } from './ServiceBadge';
 import PeriodModal from './PeriodModal';
 
+// Utility to preserve scroll position during state updates
+function withScrollLock(scroller: HTMLElement | null, fn: () => void) {
+  if (!scroller) return fn();
+  const top = scroller.scrollTop;
+  fn();
+  requestAnimationFrame(() => {
+    scroller.scrollTop = top;
+  });
+}
+
 // Combined Actions Menu Component
 const CombinedActionsMenu: React.FC<{
   period: Period;
@@ -247,6 +257,7 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [justDragged, setJustDragged] = useState(false);
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+  const columnRefs = useRef<Record<LaneId, HTMLDivElement | null>>({});
 
   const handleOpen = (period: Period) => {
     onOpen(period);
@@ -430,30 +441,26 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
     setJustDragged(true);
     setTimeout(() => setJustDragged(false), 100);
     
-    // Update the period with new status
-    const updatedPeriod: Period = {
-      ...draggedPeriod,
-      status: target as PeriodStatus,
-      comms: [
-        {
-          at: new Date().toISOString(),
-          type: 'note',
-          summary: `Status changed from "${draggedPeriod.status}" to "${target}"`
-        },
-        ...draggedPeriod.comms
-      ]
-    };
-    
-    onUpdate(updatedPeriod);
-    onToast(`Moved to ${target}`, 'success');
-    
-    // Ensure the dropped card is visible
-    requestAnimationFrame(() => {
-      const cardEl = cardRefs.current[draggedPeriod.id];
-      if (cardEl) {
-        cardEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      }
+    // Preserve scroll position during state update
+    withScrollLock(columnRefs.current[targetLane], () => {
+      // Update the period with new status
+      const updatedPeriod: Period = {
+        ...draggedPeriod,
+        status: target as PeriodStatus,
+        comms: [
+          {
+            at: new Date().toISOString(),
+            type: 'note',
+            summary: `Status changed from "${draggedPeriod.status}" to "${target}"`
+          },
+          ...draggedPeriod.comms
+        ]
+      };
+      
+      onUpdate(updatedPeriod);
     });
+    
+    onToast(`Moved to ${target}`, 'success');
   };
 
   return (
@@ -481,6 +488,7 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
 
             {/* Column Content */}
             <div 
+              ref={(el) => { columnRefs.current[lane.id] = el; }}
               className="kanban__scroller space-y-3 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 pr-1" 
               style={{ maxHeight: '900px', minHeight: '900px' }}
               onDragOver={(e) => handleDragOver(e, lane.id)}
