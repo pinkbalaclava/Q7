@@ -259,6 +259,7 @@ const DashboardV2: React.FC = () => {
 
       {/* Main Content */}
       <div className="py-8">
+        <WideContainer>
           {/* DashboardV2 Grid Layout */}
           {/* Normalize groups to fixed keys */}
           {(() => {
