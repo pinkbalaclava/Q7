@@ -105,3 +105,17 @@ html {
   color: #1D4ED8;
   font-weight: 500;
 }
+
+.filter-lozenge {
+  font-size: 10px;
+  padding: 1px 4px;
+  border-radius: 999px;
+  background: #EFF6FF;
+  color: #1D4ED8;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.filter.is-filtered.pr-16 {
+  padding-right: 4rem;
+}
