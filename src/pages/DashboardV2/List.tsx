@@ -294,11 +294,11 @@ const List: React.FC<ListProps> = ({ periods, serviceFilter, onOpen, onUpdate, o
                 {/* Client */}
                 <td className="p-4">
                   <button
-                    onClick={() => handleOpen(period)}
+                    onClick={() => onOpen(period)}
                     className="text-left"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
-                        handleOpen(period);
+                        onOpen(period);
                       }
                     }}
                   >

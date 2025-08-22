@@ -521,11 +521,7 @@ const DashboardV2: React.FC = () => {
             <List
               periods={visiblePeriods}
               serviceFilter={service === "ALL" ? undefined : service}
-              onOpen={(clientId) => {
-                // Find the period that was clicked to get service context
-                const period = visiblePeriods.find(p => p.clientId === clientId);
-                handleOpenClient(clientId, period?.service, period?.id);
-              }}
+              onOpen={handleOpenClient}
               onUpdate={handleUpdatePeriod}
               onToast={showToast}
             />

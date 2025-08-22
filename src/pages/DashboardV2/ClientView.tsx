@@ -167,6 +167,31 @@ const ClientView: React.FC<ClientViewProps> = ({
     
     setNotes(prev => [note, ...prev]);
     setNewNote('');
+    
+    // Also add the note to the period's comms for consistency
+    const updatedPeriods = periods.map(period => {
+      if (period.clientId === clientId) {
+        return {
+          ...period,
+          comms: [
+            {
+              at: new Date().toISOString(),
+              type: 'note' as const,
+              summary: `Client note: ${newNote.trim()}`
+            },
+            ...(period.comms || [])
+          ]
+        };
+      }
+      return period;
+    });
+    
+    // Update periods in parent component
+    updatedPeriods.forEach(period => {
+      if (period.clientId === clientId && period.comms?.[0]?.summary.includes(newNote.trim())) {
+        onUpdate(period);
+      }
+    });
   };
 
   const handleEditNote = (noteId: string) => {

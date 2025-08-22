@@ -166,23 +166,7 @@ const CombinedActionsMenu: React.FC<{
                     className="w-full flex items-center gap-3 px-2 py-1.5 text-sm text-left hover:bg-gray-50 rounded-md transition-colors"
                   >
                     <Mail className="w-3 h-3 text-blue-600" />
-                    <span>Email reminder sent</span>
-                  </button>
-                  
-                  <button
-                    onClick={handleUploadWorking}
-                    className="w-full flex items-center gap-3 px-2 py-1.5 text-sm text-left hover:bg-gray-50 rounded-md transition-colors"
-                  >
-                    <Upload className="w-3 h-3 text-green-600" />
-                    <span>Upload working file</span>
-                  </button>
-                  
-                  <button
-                    onClick={handleRequestApproval}
-                    className="w-full flex items-center gap-3 px-2 py-1.5 text-sm text-left hover:bg-gray-50 rounded-md transition-colors"
-                  >
-                    <CheckCircle2 className="w-3 h-3 text-purple-600" />
-                    <span>Approval requested</span>
+                    <span>Send email reminder</span>
                   </button>
                   
                   <button

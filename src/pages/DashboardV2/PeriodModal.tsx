@@ -242,18 +242,6 @@ export default function PeriodModal({ open, period, onClose, onUpdate }: Props) 
                       onClick={logReminderOrEmail}
                     />
                     <ActionTile
-                      label="Upload Working File"
-                      icon={<Paperclip size={18} className="text-green-700" />}
-                      variant="green"
-                      onClick={addWorkingFile}
-                    />
-                    <ActionTile
-                      label="Upload Final Output"
-                      icon={<UploadCloud size={18} className="text-purple-700" />}
-                      variant="purple"
-                      onClick={addFinalOutput}
-                    />
-                    <ActionTile
                       label="Generate / View Link"
                       icon={<Link2 size={18} className="text-indigo-700" />}
                       variant="indigo"
@@ -264,12 +252,6 @@ export default function PeriodModal({ open, period, onClose, onUpdate }: Props) 
                       icon={<Send size={18} className="text-sky-700" />}
                       variant="sky"
                       onClick={sendClientLink}
-                    />
-                    <ActionTile
-                      label="Request Approval"
-                      icon={<Clock size={18} className="text-amber-700" />}
-                      variant="amber"
-                      onClick={doRequestApproval}
                     />
                     <ActionTile
                       label="Mark Submitted"
