@@ -286,10 +286,7 @@ const DashboardV2: React.FC = () => {
 
             {/* Donut (left, spans two rows) */}
             <section className="card area--donut">
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Job Status</h3>
-                <NestedStatusKanbanChart periods={visiblePeriods} />
-              </div>
+              <NestedStatusKanbanChart periods={visiblePeriods} />
             </section>
 
             {/* Right-side status cards, exact slots */}
