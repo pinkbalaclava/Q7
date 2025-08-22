@@ -79,7 +79,7 @@
 /* StatusCard styles */
 .sc__hdr{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:8px; margin-bottom:8px; }
 .sc__ico{ width:28px; height:28px; border-radius:8px; display:grid; place-items:center; background: color-mix(in srgb, var(--accent) 12%, #ffffff); color: color-mix(in srgb, var(--accent) 70%, #0b1220); }
-.sc__title{ font:600 14px/1.1 ui-sans-serif,system-ui; color:#0f172a; margin:0; }
+.sc__title{ font:600 18px/1.2 ui-sans-serif,system-ui; color:#0f172a; margin:0; }
 .sc__total{ font:700 16px/1 ui-sans-serif,system-ui; color:#0f172a; }
 .sc__meta{ display:flex; flex-direction:column; gap:6px; }
 .sc__row{ display:flex; justify-content:space-between; color:#475569; }
