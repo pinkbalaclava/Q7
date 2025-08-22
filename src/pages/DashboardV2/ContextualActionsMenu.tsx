@@ -115,23 +115,7 @@ export function ContextualActionsMenu({ period, onChange }: Props) {
               className="w-full flex items-center gap-3 px-3 py-2 text-sm text-left hover:bg-gray-50 transition-colors"
             >
               <Mail className="w-4 h-4 text-blue-600" />
-              <span>Email reminder sent</span>
-            </button>
-            
-            <button
-              onClick={handleUploadWorking}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-left hover:bg-gray-50 transition-colors"
-            >
-              <Upload className="w-4 h-4 text-green-600" />
-              <span>Upload working file</span>
-            </button>
-            
-            <button
-              onClick={handleRequestApproval}
-              className="w-full flex items-center gap-3 px-3 py-2 text-sm text-left hover:bg-gray-50 transition-colors"
-            >
-              <CheckCircle2 className="w-4 h-4 text-purple-600" />
-              <span>Approval requested</span>
+              <span>Send email reminder</span>
             </button>
             
             <button
