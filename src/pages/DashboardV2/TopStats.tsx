@@ -186,12 +186,9 @@ const TopStats: React.FC<TopStatsProps> = ({ periods, serviceFilter }) => {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {/* Nested Status Kanban Chart */}
         <NestedStatusKanbanChart periods={periods} />
-
-        {/* On-Time Burnup Card - replaces Workload Timeline */}
-        <OnTimeBurnupCard periods={periods} />
       </div>
     </div>
   );
