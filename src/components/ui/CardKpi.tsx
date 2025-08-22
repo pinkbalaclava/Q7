@@ -32,9 +32,7 @@ export function CardKpi({
       "kpi-card rounded-2xl border p-6 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5",
       statusClasses[status],
       className
-    )}>
-      {...props}
-    >
+    )} {...props}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-medium text-gray-600">{title}</h3>
