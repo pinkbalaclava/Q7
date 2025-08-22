@@ -11,16 +11,10 @@ export function StatusCard({
   groupKey:string;      // 'todo' | 'inprog' | 'withclient' | 'ready' | 'done'
 }) {
   return (
-    <div
-      className="kpi-link"
+    <section
+      className="card card--pad kpi-link"
       data-group={groupKey}
-      style={
-        { 
-          // expose accent to CSS
-          // @ts-ignore
-          "--accent": accent,
-        } as React.CSSProperties
-      }
+      style={{ "--accent": accent } as React.CSSProperties}
       aria-labelledby={`${groupKey}-title`}
     >
       <header className="sc__hdr">
@@ -35,6 +29,6 @@ export function StatusCard({
           </div>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

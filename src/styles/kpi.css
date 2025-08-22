@@ -35,6 +35,22 @@
   border-color: #fecaca;
 }
 
+/* StatusCard hot state */
+.card.kpi-link.is-hot {
+  border-color: var(--accent);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--accent) 10%, #fff) 0%,
+    #fff 70%);
+  box-shadow: 0 10px 26px rgba(0,0,0,.10);
+  transform: translateY(-2px);
+}
+
+/* ensure children don't paint backgrounds */
+.sc__hdr, .sc__meta { 
+  background: transparent; 
+  box-shadow: none; 
+}
+
 /* KPI Grid Layout */
 .kpi-grid {
   display: grid;

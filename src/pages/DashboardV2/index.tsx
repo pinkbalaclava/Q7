@@ -250,7 +250,7 @@ const DashboardV2: React.FC = () => {
 
   // Add hover interactions to status cards
   useEffect(() => {
-    document.querySelectorAll('.kpi-link').forEach(card => {
+    document.querySelectorAll('.card.kpi-link').forEach(card => {
       const key = card.getAttribute('data-group');
       if (key) {
         const handleMouseEnter = () => highlightGroup(key, getAccentForKey(key));
@@ -331,61 +331,51 @@ const DashboardV2: React.FC = () => {
             </section>
 
             {/* Right-side status cards, exact slots */}
-            <section className="card card--pad area--todo" data-group="todo">
-              <StatusCard
-                title="To Do"
-                total={g.todo.total}
-                items={g.todo.items}
-                groupKey="todo"
-                accent={accents.todo}
-                icon={<ClipboardList size={16} strokeWidth={1.75} />}
-              />
-            </section>
+            <StatusCard
+              title="To Do"
+              total={g.todo.total}
+              items={g.todo.items}
+              groupKey="todo"
+              accent={accents.todo}
+              icon={<ClipboardList size={16} strokeWidth={1.75} />}
+            />
 
-            <section className="card card--pad area--inprog" data-group="inprog">
-              <StatusCard
-                title="In Progress"
-                total={g.inprog.total}
-                items={g.inprog.items}
-                groupKey="inprog"
-                accent={accents.inprog}
-                icon={<Loader2 size={16} strokeWidth={1.75} />}
-              />
-            </section>
+            <StatusCard
+              title="In Progress"
+              total={g.inprog.total}
+              items={g.inprog.items}
+              groupKey="inprog"
+              accent={accents.inprog}
+              icon={<Loader2 size={16} strokeWidth={1.75} />}
+            />
 
-            <section className="card card--pad area--withcl" data-group="withclient">
-              <StatusCard
-                title="With Client"
-                total={g.withclient.total}
-                items={g.withclient.items}
-                groupKey="withclient"
-                accent={accents.withclient}
-                icon={<UserCheck size={16} strokeWidth={1.75} />}
-              />
-            </section>
+            <StatusCard
+              title="With Client"
+              total={g.withclient.total}
+              items={g.withclient.items}
+              groupKey="withclient"
+              accent={accents.withclient}
+              icon={<UserCheck size={16} strokeWidth={1.75} />}
+            />
 
-            <section className="card card--pad area--ready" data-group="ready">
-              <StatusCard
-                title="Ready for Review"
-                total={g.ready.total}
-                items={g.ready.items}
-                groupKey="ready"
-                accent={accents.ready}
-                icon={<FileCheck2 size={16} strokeWidth={1.75} />}
-              />
-            </section>
+            <StatusCard
+              title="Ready for Review"
+              total={g.ready.total}
+              items={g.ready.items}
+              groupKey="ready"
+              accent={accents.ready}
+              icon={<FileCheck2 size={16} strokeWidth={1.75} />}
+            />
 
             {/* Completed (tall, spans both rows by area definition) */}
-            <section className="card card--pad area--done" data-group="done">
-              <StatusCard
-                title="Completed"
-                total={g.done.total}
-                items={g.done.items}
-                groupKey="done"
-                accent={accents.done}
-                icon={<CheckCircle2 size={16} strokeWidth={1.75} />}
-              />
-            </section>
+            <StatusCard
+              title="Completed"
+              total={g.done.total}
+              items={g.done.items}
+              groupKey="done"
+              accent={accents.done}
+              icon={<CheckCircle2 size={16} strokeWidth={1.75} />}
+            />
           </div>
             );
           })()}
