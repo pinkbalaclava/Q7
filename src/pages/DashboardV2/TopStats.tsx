@@ -15,6 +15,8 @@ import {
 } from './metrics';
 import NestedStatusKanbanChart from './NestedStatusKanbanChart';
 import OnTimeBurnupCard from '../../components/charts/OnTimeBurnupCard';
+import { JobStatusBoard } from '../../sections/JobStatusBoard';
+import { laneForStatus, LANES } from './lanes5';
 
 interface TopStatsProps {
   periods: Period[];
@@ -42,6 +44,33 @@ const TopStats: React.FC<TopStatsProps> = ({ periods, serviceFilter }) => {
     [periods, serviceFilter]
   );
 
+  // Prepare data for JobStatusBoard
+  const jobStatusGroups = React.useMemo(() => {
+    // Group periods by lane
+    const laneGroups = LANES.map(lane => {
+      const lanePeriods = periods.filter(p => laneForStatus(p.status) === lane.id);
+      
+      // Get status breakdown for this lane
+      const statusCounts = new Map<string, number>();
+      lanePeriods.forEach(period => {
+        const count = statusCounts.get(period.status) || 0;
+        statusCounts.set(period.status, count + 1);
+      });
+      
+      const items = Array.from(statusCounts.entries())
+        .map(([status, count]) => ({ label: status, count }))
+        .sort((a, b) => b.count - a.count);
+      
+      return {
+        key: lane.id,
+        name: lane.title,
+        total: lanePeriods.length,
+        items
+      };
+    });
+    
+    return laneGroups;
+  }, [periods]);
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
@@ -84,8 +113,11 @@ const TopStats: React.FC<TopStatsProps> = ({ periods, serviceFilter }) => {
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 gap-6">
-        {/* Nested Status Kanban Chart */}
-        <NestedStatusKanbanChart periods={periods} />
+        {/* Job Status Board */}
+        <JobStatusBoard 
+          groups={jobStatusGroups}
+          donut={<NestedStatusKanbanChart periods={periods} />}
+        />
       </div>
     </div>
   );

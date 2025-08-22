@@ -128,3 +128,4 @@ html {
 
 /* Import KPI styles */
 @import './styles/kpi.css';
+@import './styles/jobstatus.css';

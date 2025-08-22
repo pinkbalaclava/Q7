@@ -1,0 +1,54 @@
+/* Job Status Board Styles */
+.jobstatus {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Donut chart container */
+.jobstatus__donut {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+/* Status cards grid */
+.jobstatus__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-content: start;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1024px) {
+  .jobstatus {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .jobstatus__donut {
+    min-height: 300px;
+  }
+  
+  .jobstatus__grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .jobstatus__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .jobstatus__donut {
+    min-height: 250px;
+  }
+}
