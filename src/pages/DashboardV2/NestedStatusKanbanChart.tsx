@@ -222,10 +222,6 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 shadow-sm w-full">
-      <div className="p-6 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900">Job Status</h3>
-        <p className="text-sm text-gray-600">Inner ring = Kanban groups • Outer ring = detailed statuses. Click a group to filter.</p>
-      </div>
       <div className="p-6">
         <div className="flex justify-center">
           {/* Chart */}
