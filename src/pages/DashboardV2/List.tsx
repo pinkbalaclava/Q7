@@ -14,6 +14,7 @@ import { nextAllowedTransitions, daysUntil } from './status';
 import { StatusPill } from './StatusPill';
 import { MoveMenu } from './MoveMenu';
 import { ContextualActionsMenu } from './ContextualActionsMenu';
+import { LANES, laneForStatus } from './lanes5';
 import { ServiceBadge } from './ServiceBadge';
 import PeriodModal from './PeriodModal';
 
@@ -117,7 +118,10 @@ const List: React.FC<ListProps> = ({ periods, serviceFilter, onOpen, onUpdate, o
       ]
     };
     onUpdate(updatedPeriod);
-    onToast(`Moved to ${pendingMove.target}`, 'success');
+    // Get the lane title for the toast message
+    const targetLane = laneForStatus(pendingMove.target);
+    const laneTitle = LANES.find(l => l.id === targetLane)?.title || 'Unknown';
+    onToast(`Moved to ${laneTitle}`, 'success');
     setPendingMove(null);
   }
 

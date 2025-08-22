@@ -317,7 +317,10 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
       ]
     };
     onUpdate(updatedPeriod);
-    onToast(`Moved to ${pendingMove.target}`, 'success');
+    // Get the lane title for the toast message
+    const targetLane = laneForStatus(pendingMove.target);
+    const laneTitle = LANES.find(l => l.id === targetLane)?.title || 'Unknown';
+    onToast(`Moved to ${laneTitle}`, 'success');
     setPendingMove(null);
   };
 
@@ -431,7 +434,9 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
     
     onUpdate(updatedPeriod);
     
-    onToast(`Moved to ${target}`, 'success');
+    // Get the lane title for the toast message
+    const laneTitle = LANES.find(l => l.id === targetLane)?.title || 'Unknown';
+    onToast(`Moved to ${laneTitle}`, 'success');
   };
 
   return (
