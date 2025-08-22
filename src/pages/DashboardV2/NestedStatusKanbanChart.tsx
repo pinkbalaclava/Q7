@@ -163,6 +163,7 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
     });
 
     return () => chartRef.current?.destroy();
+  }, [groups, innerValues, innerColors, outerLabels, outerValues, outerColors, statusToGroup]);
 
   // Build legend groups with counts
   const legendGroups = React.useMemo(() => {
@@ -200,13 +201,16 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
           {/* Lane Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
             {(["TODO","INPROG","WITHCLIENT","READY","DONE"] as LaneId[]).map((lane) => (
-              <div key={lane} className="rounded-lg border border-gray-200 p-3">
-                <div className="flex items-center gap-2 mb-2">
+              <div 
+                key={lane} 
                 className={`rounded-lg border p-4 transition-all duration-200 ${
                   hoveredLane === lane 
                     ? 'border-gray-300 shadow-md bg-gray-50' 
-                <div className="flex items-center gap-3 mb-3">
+                    : 'border-gray-200'
                 }`}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div 
                     className="h-4 w-4 rounded-full flex-shrink-0" 
                     style={{ backgroundColor: LANE_COLORS[lane].bg, border: `1px solid ${LANE_COLORS[lane].border}` }} 
                   />
@@ -227,6 +231,7 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
                 )}
                 {(legendGroups.byGroup[lane] || []).length === 0 && (
                   <div className="text-xs text-gray-400 italic">No items</div>
+                )}
               </div>
             ))}
           </div>
