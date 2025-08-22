@@ -422,6 +422,8 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
     const updatedPeriod: Period = {
       ...draggedPeriod,
       status: target as PeriodStatus,
+      // Set due date to current time to ensure it appears at top when sorted
+      dueDate: new Date().toISOString(),
       comms: [
         {
           at: new Date().toISOString(),

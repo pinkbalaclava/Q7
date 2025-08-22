@@ -49,7 +49,7 @@ html {
 }
 
 .kanban__card.is-dragging {
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
   z-index: 1000;
   cursor: grabbing !important;
   opacity: 1 !important;
