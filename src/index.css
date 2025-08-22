@@ -43,15 +43,20 @@ html {
 }
 
 /* Kanban drag and drop styles */
+.kanban__card {
+  transition: box-shadow .15s ease, transform .15s ease;
+}
+
 .kanban__card.is-dragging {
   transform: rotate(-8deg) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
   z-index: 1000;
-  cursor: grabbing;
+  cursor: grabbing !important;
+  opacity: 1 !important;
 }
 
 .kanban__card--ghost {
-  opacity: 0.3;
+  opacity: 0.35 !important;
   transform: none !important;
 }
 
