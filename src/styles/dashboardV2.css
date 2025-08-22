@@ -20,6 +20,13 @@
 .area--ready     { grid-area: ready; }
 .area--done      { grid-area: completed; }
 
+/* Map groupKey to grid areas */
+[data-group="todo"] { grid-area: todo; }
+[data-group="inprog"] { grid-area: inprog; }
+[data-group="withclient"] { grid-area: withclient; }
+[data-group="ready"] { grid-area: ready; }
+[data-group="done"] { grid-area: completed; }
+
 /* Cards (shared look) */
 .card {
   background: #fff;
@@ -67,4 +74,28 @@
       "ready"
       "completed";
   }
+}
+
+/* StatusCard styles */
+.sc__hdr{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:8px; margin-bottom:8px; }
+.sc__ico{ width:28px; height:28px; border-radius:8px; display:grid; place-items:center; background: color-mix(in srgb, var(--accent) 12%, #ffffff); color: color-mix(in srgb, var(--accent) 70%, #0b1220); }
+.sc__title{ font:600 14px/1.1 ui-sans-serif,system-ui; color:#0f172a; margin:0; }
+.sc__total{ font:700 16px/1 ui-sans-serif,system-ui; color:#0f172a; }
+.sc__meta{ display:flex; flex-direction:column; gap:6px; }
+.sc__row{ display:flex; justify-content:space-between; color:#475569; }
+
+.kpi-link{ transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease; }
+.kpi-link.is-hot{
+  border-color: color-mix(in srgb, var(--accent) 45%, #dbeafe);
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--accent) 25%, transparent);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--accent) 8%, #ffffff) 0%,
+    #ffffff 70%);
+  transform: translateY(-2px);
+}
+.kpi-link.is-hot .sc__ico{
+  background: color-mix(in srgb, var(--accent) 18%, #ffffff);
+  color: color-mix(in srgb, var(--accent) 80%, #0b1220);
+  outline: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  outline-offset: 2px;
 }

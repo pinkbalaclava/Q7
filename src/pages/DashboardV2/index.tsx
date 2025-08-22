@@ -21,7 +21,7 @@ import { HeaderBlock } from './HeaderBlock';
 import ClientView from './ClientView';
 import NestedStatusKanbanChart from './NestedStatusKanbanChart';
 import { CardKpi } from '@/components/ui/CardKpi';
-import { Users, TrendingUp } from 'lucide-react';
+import { Users, TrendingUp, Inbox, Wrench, Clock8, Rocket, CheckCircle2 } from 'lucide-react';
 
 // Get unique assignees from demo data
 const getUniqueAssignees = (periods: Period[]): string[] => {
@@ -290,26 +290,51 @@ const DashboardV2: React.FC = () => {
             </section>
 
             {/* Right-side status cards, exact slots */}
-            <section className="card card--pad area--todo kpi-link">
-              <StatusCard title="To Do" total={g.todo.total} items={g.todo.items} />
-            </section>
+            <StatusCard 
+              title="To Do" 
+              total={g.todo.total} 
+              items={g.todo.items}
+              icon={<Inbox size={16} />}
+              accent="#f59e0b"
+              groupKey="todo"
+            />
 
-            <section className="card card--pad area--inprog kpi-link">
-              <StatusCard title="In Progress" total={g.inprog.total} items={g.inprog.items} />
-            </section>
+            <StatusCard 
+              title="In Progress" 
+              total={g.inprog.total} 
+              items={g.inprog.items}
+              icon={<Wrench size={16} />}
+              accent="#3b82f6"
+              groupKey="inprog"
+            />
 
-            <section className="card card--pad area--withclient kpi-link">
-              <StatusCard title="With Client" total={g.withclient.total} items={g.withclient.items} />
-            </section>
+            <StatusCard 
+              title="With Client" 
+              total={g.withclient.total} 
+              items={g.withclient.items}
+              icon={<Clock8 size={16} />}
+              accent="#db2777"
+              groupKey="withclient"
+            />
 
-            <section className="card card--pad area--ready kpi-link">
-              <StatusCard title="Ready for Review" total={g.ready.total} items={g.ready.items} />
-            </section>
+            <StatusCard 
+              title="Ready for Review" 
+              total={g.ready.total} 
+              items={g.ready.items}
+              icon={<Rocket size={16} />}
+              accent="#6366f1"
+              groupKey="ready"
+            />
 
             {/* Completed (tall, spans both rows by area definition) */}
-            <section className="card card--pad area--done kpi-link">
-              <StatusCard title="Completed" total={g.done.total} items={g.done.items} />
-            </section>
+            <StatusCard 
+              title="Completed" 
+              total={g.done.total} 
+              items={g.done.items}
+              icon={<CheckCircle2 size={16} />}
+              accent="#10b981"
+              groupKey="done"
+            />
           </div>
             );
           })()}
