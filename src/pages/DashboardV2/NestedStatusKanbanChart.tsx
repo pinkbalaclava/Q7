@@ -221,7 +221,7 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
   }, [outerLabels, outerValues, statusToGroup]);
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 shadow-sm w-full">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm w-full">
       <div className="p-6">
         <div className="flex justify-center">
           {/* Chart */}
