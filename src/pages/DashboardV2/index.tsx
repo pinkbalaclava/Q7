@@ -292,7 +292,7 @@ const DashboardV2: React.FC = () => {
                     <div className="relative">
                       <select
                         className={`filter px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[120px] ${
-                          service !== "ALL" ? "is-filtered pr-16" : ""
+                          service !== "ALL" ? "is-filtered" : ""
                         }`}
                         value={service}
                         onChange={(e) => setService(e.target.value as Service | "ALL")}
@@ -304,7 +304,7 @@ const DashboardV2: React.FC = () => {
                         <option value="SA">Self Assessment</option>
                       </select>
                       {service !== "ALL" && (
-                        <div className="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                           <span className="filter-lozenge">Filtered</span>
                         </div>
                       )}
@@ -316,7 +316,7 @@ const DashboardV2: React.FC = () => {
                 <div className="relative">
                   <select
                     className={`filter px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[140px] ${
-                      status !== "ALL" ? "is-filtered pr-16" : ""
+                      status !== "ALL" ? "is-filtered" : ""
                     }`}
                     value={status}
                     onChange={(e) => setStatus(e.target.value as "ALL" | PeriodStatus)}
@@ -328,7 +328,7 @@ const DashboardV2: React.FC = () => {
                     ))}
                   </select>
                   {status !== "ALL" && (
-                    <div className="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                       <span className="filter-lozenge">Filtered</span>
                     </div>
                   )}
@@ -338,7 +338,7 @@ const DashboardV2: React.FC = () => {
                 <div className="relative">
                   <select
                     className={`filter px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[120px] ${
-                      assignee !== "ALL" ? "is-filtered pr-16" : ""
+                      assignee !== "ALL" ? "is-filtered" : ""
                     }`}
                     value={assignee}
                     onChange={(e) => setAssignee(e.target.value as "ALL" | string)}
@@ -350,7 +350,7 @@ const DashboardV2: React.FC = () => {
                     ))}
                   </select>
                   {assignee !== "ALL" && (
-                    <div className="absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
                       <span className="filter-lozenge">Filtered</span>
                     </div>
                   )}

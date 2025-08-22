@@ -116,6 +116,6 @@ html {
   white-space: nowrap;
 }
 
-.filter.is-filtered.pr-16 {
-  padding-right: 4rem;
+.filter.is-filtered {
+  padding-left: 4.5rem;
 }
