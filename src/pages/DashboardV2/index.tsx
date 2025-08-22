@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Grid3X3, List as ListIcon, Filter, MoreHorizontal, ClipboardList, Loader2, UserCheck, FileCheck2, CheckCircle2 } from 'lucide-react';
 import '@/styles/dashboardV2.css';
+import { highlightGroup } from '@/utils/highlight';
 import PersonaNav from '../../components/PersonaNav';
 import { NAV_OWNER } from '../../persona/nav';
 import TopKpi from '@/components/ui/TopKpi';
@@ -170,14 +171,6 @@ const DashboardV2: React.FC = () => {
     onTimeRate: kpiOnTimeRateMTD(visiblePeriods)
   }), [visiblePeriods]);
 
-  // Accent colors for status cards
-  const accents = {
-    todo:       "#F59E0B", // amber
-    inprog:     "#60A5FA", // blue
-    withclient: "#EC4899", // pink
-    ready:      "#7C3AED", // violet
-    done:       "#22C55E", // green
-  };
 
   // Prepare groups for status cards
   const groups = useMemo(() => {
@@ -234,6 +227,40 @@ const DashboardV2: React.FC = () => {
     serviceFilter?: Service;
     periodId?: string;
   } | null>(null);
+
+  // Accent colors for status cards (matching the ones used in render)
+  const accents = {
+    todo:       "#F59E0B", // amber
+    inprog:     "#60A5FA", // blue
+    withclient: "#EC4899", // pink
+    ready:      "#7C3AED", // violet
+    done:       "#22C55E", // green
+  };
+
+  // Helper function to get accent color for a group key
+  const getAccentForKey = (key: string): string => {
+    return accents[key as keyof typeof accents] || "#6B7280";
+  };
+
+  // Add hover interactions to status cards
+  useEffect(() => {
+    document.querySelectorAll('.kpi-link').forEach(card => {
+      const key = card.getAttribute('data-group');
+      if (key) {
+        const handleMouseEnter = () => highlightGroup(key, getAccentForKey(key));
+        const handleMouseLeave = () => highlightGroup(undefined);
+        
+        card.addEventListener('mouseenter', handleMouseEnter);
+        card.addEventListener('mouseleave', handleMouseLeave);
+        
+        // Cleanup function to remove listeners
+        return () => {
+          card.removeEventListener('mouseenter', handleMouseEnter);
+          card.removeEventListener('mouseleave', handleMouseLeave);
+        };
+      }
+    });
+  }, []);
 
   return (
     <>
