@@ -255,7 +255,6 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
   const [opened, setOpened] = useState<Period | null>(null);
   const [dragOverColumn, setDragOverColumn] = useState<LaneId | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-  const [justDragged, setJustDragged] = useState(false);
   const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const columnRefs = useRef<Record<LaneId, HTMLDivElement | null>>({});
 
@@ -281,16 +280,13 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
       return acc;
     }, {} as Record<LaneId, Period[]>);
     
-    // If we just dragged, don't auto-sort to preserve user's chosen position
-    if (!justDragged) {
-      // Sort by due date within each lane
-      Object.keys(grouped).forEach(laneId => {
-        grouped[laneId as LaneId].sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
-      });
-    }
+    // Always sort by due date - keep it simple
+    Object.keys(grouped).forEach(laneId => {
+      grouped[laneId as LaneId].sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+    });
     
     return grouped;
-  }, [periods, justDragged]);
+  }, [periods]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {
@@ -388,10 +384,12 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
     setDraggedPeriod(null);
     setDragOverColumn(null);
     setDragOverIndex(null);
-    // Clean up any drag styles
+    
+    // Clean up all drag styles immediately
     requestAnimationFrame(() => {
       document.querySelectorAll('.kanban__card').forEach(el => {
-        (el as HTMLElement).style.transform = '';
+        const element = el as HTMLElement;
+        element.style.transform = '';
         el.classList.remove('is-dragging');
         el.classList.remove('kanban__card--ghost');
       });
@@ -437,28 +435,21 @@ const Board: React.FC<Props> = ({ periods, serviceFilter, onOpen, onUpdate, onTo
       return; // nothing to do
     }
     
-    // Mark that we just dragged to prevent auto-sorting
-    setJustDragged(true);
-    setTimeout(() => setJustDragged(false), 100);
+    // Update the period with new status
+    const updatedPeriod: Period = {
+      ...draggedPeriod,
+      status: target as PeriodStatus,
+      comms: [
+        {
+          at: new Date().toISOString(),
+          type: 'note',
+          summary: `Status changed from "${draggedPeriod.status}" to "${target}"`
+        },
+        ...draggedPeriod.comms
+      ]
+    };
     
-    // Preserve scroll position during state update
-    withScrollLock(columnRefs.current[targetLane], () => {
-      // Update the period with new status
-      const updatedPeriod: Period = {
-        ...draggedPeriod,
-        status: target as PeriodStatus,
-        comms: [
-          {
-            at: new Date().toISOString(),
-            type: 'note',
-            summary: `Status changed from "${draggedPeriod.status}" to "${target}"`
-          },
-          ...draggedPeriod.comms
-        ]
-      };
-      
-      onUpdate(updatedPeriod);
-    });
+    onUpdate(updatedPeriod);
     
     onToast(`Moved to ${target}`, 'success');
   };
