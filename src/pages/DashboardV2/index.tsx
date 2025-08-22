@@ -3,6 +3,8 @@ import { Search, Grid3X3, List as ListIcon, Filter, MoreHorizontal } from 'lucid
 import '@/styles/dashboardV2.css';
 import PersonaNav from '../../components/PersonaNav';
 import { NAV_OWNER } from '../../persona/nav';
+import TopKpi from '@/components/ui/TopKpi';
+import { StatusCard } from '@/components/ui/StatusCard';
 import { demoPeriods } from './demo-data';
 import type { Period, Service, PeriodStatus } from './types';
 import { 
@@ -267,24 +269,12 @@ const DashboardV2: React.FC = () => {
           <div className="dashboardV2 mb-8">
             {/* KPI 1 */}
             <section className="card card--pad area--kpi1">
-              <CardKpi
-                title="Active Clients"
-                value={stats.activeClients}
-                subtitle="With action needed"
-                icon={<Users className="w-5 h-5" />}
-                status="neutral"
-              />
+              <TopKpi title="Active Clients" value={stats.activeClients} subtitle="With action needed" />
             </section>
 
             {/* KPI 2 */}
             <section className="card card--pad area--kpi2">
-              <CardKpi
-                title="On-Time Rate"
-                value={`${stats.onTimeRate}%`}
-                subtitle="MTD completion"
-                icon={<TrendingUp className="w-5 h-5" />}
-                status={stats.onTimeRate >= 90 ? 'good' : stats.onTimeRate >= 70 ? 'warn' : 'bad'}
-              />
+              <TopKpi title="On-Time Rate" value={`${stats.onTimeRate}%`} variant={stats.onTimeRate>=90?'good':stats.onTimeRate>=70?'warn':'bad'} />
             </section>
 
             {/* Donut (left, spans two rows) */}
@@ -297,104 +287,24 @@ const DashboardV2: React.FC = () => {
 
             {/* Right-side status cards, exact slots */}
             <section className="card card--pad area--todo">
-              <CardKpi
-                title="To Do"
-                value={groups.todo?.total || 0}
-                subtitle={
-                  groups.todo?.items.length ? (
-                    <div className="space-y-1">
-                      {groups.todo.items.map((item, index) => (
-                        <div key={index} className="text-xs text-gray-500">
-                          {item.label}: {item.count}
-                        </div>
-                      ))}
-                    </div>
-                  ) : undefined
-                }
-                status="neutral"
-                data-group="TODO"
-              />
+              <StatusCard title="To Do" total={groups.todo?.total || 0} items={groups.todo?.items || []} />
             </section>
 
             <section className="card card--pad area--inprog">
-              <CardKpi
-                title="In Progress"
-                value={groups.inprog?.total || 0}
-                subtitle={
-                  groups.inprog?.items.length ? (
-                    <div className="space-y-1">
-                      {groups.inprog.items.map((item, index) => (
-                        <div key={index} className="text-xs text-gray-500">
-                          {item.label}: {item.count}
-                        </div>
-                      ))}
-                    </div>
-                  ) : undefined
-                }
-                status="neutral"
-                data-group="INPROG"
-              />
+              <StatusCard title="In Progress" total={groups.inprog?.total || 0} items={groups.inprog?.items || []} />
             </section>
 
             <section className="card card--pad area--withcl">
-              <CardKpi
-                title="With Client"
-                value={groups.withclient?.total || 0}
-                subtitle={
-                  groups.withclient?.items.length ? (
-                    <div className="space-y-1">
-                      {groups.withclient.items.map((item, index) => (
-                        <div key={index} className="text-xs text-gray-500">
-                          {item.label}: {item.count}
-                        </div>
-                      ))}
-                    </div>
-                  ) : undefined
-                }
-                status="neutral"
-                data-group="WITHCLIENT"
-              />
+              <StatusCard title="With Client" total={groups.withclient?.total || 0} items={groups.withclient?.items || []} />
             </section>
 
             <section className="card card--pad area--ready">
-              <CardKpi
-                title="Ready for Review"
-                value={groups.ready?.total || 0}
-                subtitle={
-                  groups.ready?.items.length ? (
-                    <div className="space-y-1">
-                      {groups.ready.items.map((item, index) => (
-                        <div key={index} className="text-xs text-gray-500">
-                          {item.label}: {item.count}
-                        </div>
-                      ))}
-                    </div>
-                  ) : undefined
-                }
-                status="neutral"
-                data-group="READY"
-              />
+              <StatusCard title="Ready for Review" total={groups.ready?.total || 0} items={groups.ready?.items || []} />
             </section>
 
             {/* Completed (tall, spans both rows by area definition) */}
             <section className="card card--pad area--done">
-              <CardKpi
-                title="Completed"
-                value={groups.done?.total || 0}
-                subtitle={
-                  groups.done?.items.length ? (
-                    <div className="space-y-1">
-                      {groups.done.items.map((item, index) => (
-                        <div key={index} className="text-xs text-gray-500">
-                          {item.label}: {item.count}
-                        </div>
-                      ))}
-                    </div>
-                  ) : undefined
-                }
-                status="neutral"
-                data-group="DONE"
-              />
+              <StatusCard title="Completed" total={groups.done?.total || 0} items={groups.done?.items || []} />
             </section>
           </div>
 
