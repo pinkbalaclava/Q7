@@ -263,18 +263,140 @@ const DashboardV2: React.FC = () => {
             <p className="text-gray-600 mt-2">Enhanced practice overview with detailed insights</p>
           </div>
 
-          {/* Analytics Strip */}
-          <TopKPIs
-            periods={visiblePeriods} 
-            serviceFilter={service === "ALL" ? undefined : service}
-            key={refreshKey} 
-          />
-          
-          <TopStats
-            periods={visiblePeriods} 
-            serviceFilter={service === "ALL" ? undefined : service}
-            key={refreshKey} 
-          />
+          {/* DashboardV2 Grid Layout */}
+          <div className="dashboardV2 mb-8">
+            {/* KPI 1 */}
+            <section className="card card--pad area--kpi1">
+              <CardKpi
+                title="Active Clients"
+                value={stats.activeClients}
+                subtitle="With action needed"
+                icon={<Users className="w-5 h-5" />}
+                status="neutral"
+              />
+            </section>
+
+            {/* KPI 2 */}
+            <section className="card card--pad area--kpi2">
+              <CardKpi
+                title="On-Time Rate"
+                value={`${stats.onTimeRate}%`}
+                subtitle="MTD completion"
+                icon={<TrendingUp className="w-5 h-5" />}
+                status={stats.onTimeRate >= 90 ? 'good' : stats.onTimeRate >= 70 ? 'warn' : 'bad'}
+              />
+            </section>
+
+            {/* Donut (left, spans two rows) */}
+            <section className="card area--donut">
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Job Status</h3>
+                <NestedStatusKanbanChart periods={visiblePeriods} />
+              </div>
+            </section>
+
+            {/* Right-side status cards, exact slots */}
+            <section className="card card--pad area--todo">
+              <CardKpi
+                title="To Do"
+                value={groups.todo?.total || 0}
+                subtitle={
+                  groups.todo?.items.length ? (
+                    <div className="space-y-1">
+                      {groups.todo.items.map((item, index) => (
+                        <div key={index} className="text-xs text-gray-500">
+                          {item.label}: {item.count}
+                        </div>
+                      ))}
+                    </div>
+                  ) : undefined
+                }
+                status="neutral"
+                data-group="TODO"
+              />
+            </section>
+
+            <section className="card card--pad area--inprog">
+              <CardKpi
+                title="In Progress"
+                value={groups.inprog?.total || 0}
+                subtitle={
+                  groups.inprog?.items.length ? (
+                    <div className="space-y-1">
+                      {groups.inprog.items.map((item, index) => (
+                        <div key={index} className="text-xs text-gray-500">
+                          {item.label}: {item.count}
+                        </div>
+                      ))}
+                    </div>
+                  ) : undefined
+                }
+                status="neutral"
+                data-group="INPROG"
+              />
+            </section>
+
+            <section className="card card--pad area--withcl">
+              <CardKpi
+                title="With Client"
+                value={groups.withclient?.total || 0}
+                subtitle={
+                  groups.withclient?.items.length ? (
+                    <div className="space-y-1">
+                      {groups.withclient.items.map((item, index) => (
+                        <div key={index} className="text-xs text-gray-500">
+                          {item.label}: {item.count}
+                        </div>
+                      ))}
+                    </div>
+                  ) : undefined
+                }
+                status="neutral"
+                data-group="WITHCLIENT"
+              />
+            </section>
+
+            <section className="card card--pad area--ready">
+              <CardKpi
+                title="Ready for Review"
+                value={groups.ready?.total || 0}
+                subtitle={
+                  groups.ready?.items.length ? (
+                    <div className="space-y-1">
+                      {groups.ready.items.map((item, index) => (
+                        <div key={index} className="text-xs text-gray-500">
+                          {item.label}: {item.count}
+                        </div>
+                      ))}
+                    </div>
+                  ) : undefined
+                }
+                status="neutral"
+                data-group="READY"
+              />
+            </section>
+
+            {/* Completed (tall, spans both rows by area definition) */}
+            <section className="card card--pad area--done">
+              <CardKpi
+                title="Completed"
+                value={groups.done?.total || 0}
+                subtitle={
+                  groups.done?.items.length ? (
+                    <div className="space-y-1">
+                      {groups.done.items.map((item, index) => (
+                        <div key={index} className="text-xs text-gray-500">
+                          {item.label}: {item.count}
+                        </div>
+                      ))}
+                    </div>
+                  ) : undefined
+                }
+                status="neutral"
+                data-group="DONE"
+              />
+            </section>
+          </div>
 
           {/* Filter Bar */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6 sticky top-4 z-20">
