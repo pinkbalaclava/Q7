@@ -5,7 +5,9 @@ import {
   DollarSign, 
   User, 
   AlertTriangle,
-  MoreHorizontal
+  MoreHorizontal,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import type { Period, Service } from './types';
 import { nextAllowedTransitions, daysUntil } from './status';
@@ -28,6 +30,57 @@ const List: React.FC<ListProps> = ({ periods, serviceFilter, onOpen, onUpdate, o
   const [uploadingPeriodId, setUploadingPeriodId] = React.useState<string | null>(null);
   const [pendingMove, setPendingMove] = React.useState<null | { period: Period; target: string }>(null);
   const [opened, setOpened] = React.useState<Period | null>(null);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
+  
+  // Reset to page 1 when periods change (due to filtering)
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [periods.length]);
+  
+  // Calculate pagination values
+  const totalItems = periods.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPeriods = periods.slice(startIndex, endIndex);
+  
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 7;
+    
+    if (totalPages <= maxVisiblePages) {
+      // Show all pages if total is small
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Smart pagination with ellipsis
+      if (currentPage <= 4) {
+        // Show first 5 pages + ellipsis + last page
+        for (let i = 1; i <= 5; i++) pages.push(i);
+        if (totalPages > 6) pages.push('...');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 3) {
+        // Show first page + ellipsis + last 5 pages
+        pages.push(1);
+        if (totalPages > 6) pages.push('...');
+        for (let i = totalPages - 4; i <= totalPages; i++) pages.push(i);
+      } else {
+        // Show first + ellipsis + current-1, current, current+1 + ellipsis + last
+        pages.push(1);
+        pages.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i);
+        pages.push('...');
+        pages.push(totalPages);
+      }
+    }
+    
+    return pages;
+  };
 
   const handleOpen = (period: Period) => {
     onOpen(period);
@@ -187,7 +240,41 @@ const List: React.FC<ListProps> = ({ periods, serviceFilter, onOpen, onUpdate, o
         accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg"
       />
 
-      <div className="w-full overflow-auto rounded-lg border border-gray-200 bg-white">
+      <div className="w-full rounded-lg border border-gray-200 bg-white">
+        {/* Results Summary */}
+        <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+          <div className="flex items-center justify-between">
+            <div className="text-sm text-gray-600">
+              Showing <span className="font-medium">{startIndex + 1}</span> to{' '}
+              <span className="font-medium">{Math.min(endIndex, totalItems)}</span> of{' '}
+              <span className="font-medium">{totalItems}</span> results
+            </div>
+            <div className="flex items-center gap-2">
+              <label htmlFor="itemsPerPage" className="text-sm text-gray-600">
+                Show:
+              </label>
+              <select
+                id="itemsPerPage"
+                value={itemsPerPage}
+                onChange={(e) => {
+                  setItemsPerPage(Number(e.target.value));
+                  setCurrentPage(1); // Reset to first page when changing items per page
+                }}
+                className="px-2 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </select>
+              <span className="text-sm text-gray-600">per page</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Table */}
+        <div className="overflow-auto">
         <table className="w-full text-sm">
           <thead className="bg-gray-50 text-gray-500">
             <tr className="border-b border-gray-200">
@@ -202,7 +289,7 @@ const List: React.FC<ListProps> = ({ periods, serviceFilter, onOpen, onUpdate, o
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {periods.map((period) => (
+            {currentPeriods.map((period) => (
               <tr key={period.id} className="group hover:bg-gray-50 transition-colors">
                 {/* Client */}
                 <td className="p-4">
@@ -293,6 +380,69 @@ const List: React.FC<ListProps> = ({ periods, serviceFilter, onOpen, onUpdate, o
             ))}
           </tbody>
         </table>
+        </div>
+        
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="px-6 py-4 border-t border-gray-200 bg-gray-50">
+            <div className="flex items-center justify-between">
+              {/* Page info */}
+              <div className="text-sm text-gray-600">
+                Page <span className="font-medium">{currentPage}</span> of{' '}
+                <span className="font-medium">{totalPages}</span>
+              </div>
+              
+              {/* Pagination controls */}
+              <div className="flex items-center space-x-2">
+                {/* Previous button */}
+                <button
+                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-500"
+                  aria-label="Previous page"
+                >
+                  <ChevronLeft className="w-4 h-4 mr-1" />
+                  Previous
+                </button>
+                
+                {/* Page numbers */}
+                <div className="flex items-center space-x-1">
+                  {getPageNumbers().map((page, index) => (
+                    <React.Fragment key={index}>
+                      {page === '...' ? (
+                        <span className="px-3 py-2 text-sm text-gray-500">...</span>
+                      ) : (
+                        <button
+                          onClick={() => setCurrentPage(page as number)}
+                          className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                            currentPage === page
+                              ? 'bg-blue-600 text-white'
+                              : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
+                          }`}
+                          aria-label={`Go to page ${page}`}
+                          aria-current={currentPage === page ? 'page' : undefined}
+                        >
+                          {page}
+                        </button>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+                
+                {/* Next button */}
+                <button
+                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                  disabled={currentPage === totalPages}
+                  className="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-gray-500"
+                  aria-label="Next page"
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4 ml-1" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Confirmation Dialog */}
