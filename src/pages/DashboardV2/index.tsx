@@ -223,13 +223,13 @@ const DashboardV2: React.FC = () => {
           </div>
 
           {/* Analytics Strip */}
-          <TopKPIs 
+          <TopKPIs
             periods={visiblePeriods} 
             serviceFilter={service === "ALL" ? undefined : service}
             key={refreshKey} 
           />
           
-          <TopStats 
+          <TopStats
             periods={visiblePeriods} 
             serviceFilter={service === "ALL" ? undefined : service}
             key={refreshKey} 

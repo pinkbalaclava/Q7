@@ -110,11 +110,10 @@ const TopStats: React.FC<TopStatsProps> = ({ periods, serviceFilter }) => {
 
   return (
     <div className="space-y-6 mb-8">
-
       {/* Charts Row */}
       <div className="grid grid-cols-1 gap-6">
         {/* Job Status Board */}
-        <JobStatusBoard 
+        <JobStatusBoard
           groups={jobStatusGroups}
           donut={<NestedStatusKanbanChart periods={periods} />}
         />
