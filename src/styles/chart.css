@@ -1,0 +1,14 @@
+/* Chart tooltip styles */
+.chart-tooltip {
+  position: fixed;   /* independent of clipped parents */
+  transform: translate(var(--tx, 0), var(--ty, 0));
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 8px 10px;
+  font-size: 12px;
+  color: #0f172a;
+  z-index: 10000;
+  pointer-events: none;
+}

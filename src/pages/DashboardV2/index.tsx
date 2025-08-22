@@ -290,24 +290,24 @@ const DashboardV2: React.FC = () => {
             </section>
 
             {/* Right-side status cards, exact slots */}
-            <section className="card card--pad area--todo">
+            <section className="card card--pad area--todo kpi-link">
               <StatusCard title="To Do" total={g.todo.total} items={g.todo.items} />
             </section>
 
-            <section className="card card--pad area--inprog">
+            <section className="card card--pad area--inprog kpi-link">
               <StatusCard title="In Progress" total={g.inprog.total} items={g.inprog.items} />
             </section>
 
-            <section className="card card--pad area--withcl">
+            <section className="card card--pad area--withclient kpi-link">
               <StatusCard title="With Client" total={g.withclient.total} items={g.withclient.items} />
             </section>
 
-            <section className="card card--pad area--ready">
+            <section className="card card--pad area--ready kpi-link">
               <StatusCard title="Ready for Review" total={g.ready.total} items={g.ready.items} />
             </section>
 
             {/* Completed (tall, spans both rows by area definition) */}
-            <section className="card card--pad area--done">
+            <section className="card card--pad area--done kpi-link">
               <StatusCard title="Completed" total={g.done.total} items={g.done.items} />
             </section>
           </div>

@@ -1,5 +1,6 @@
 import * as React from "react";
 import Chart from "chart.js/auto";
+import BodyPortal from "@/components/charts/BodyPortal";
 import { laneForStatus, type LaneId } from "./lanes5";
 import { LANE_LABELS } from "./calendarMap";
 import type { Period } from "./types";
@@ -37,6 +38,12 @@ type Props = { periods: Period[] };
 
 export default function NestedStatusKanbanChart({ periods }: Props) {
   const [hoveredLane, setHoveredLane] = React.useState<LaneId | null>(null);
+  const [tooltip, setTooltip] = React.useState<{
+    visible: boolean;
+    x: number;
+    y: number;
+    content: string;
+  }>({ visible: false, x: 0, y: 0, content: '' });
   
   // Build counts from periods
   const chartData = React.useMemo(() => {
@@ -137,21 +144,36 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
         onHover: (_e, els) => {
           if (!els.length) {
             setHoveredLane(null);
+            setTooltip({ visible: false, x: 0, y: 0, content: '' });
             // Clear all highlights
-            document.querySelectorAll('.kpi-card.is-hot').forEach(el => {
+            document.querySelectorAll('.kpi-link').forEach(el => {
               el.classList.remove('is-hot');
             });
             return;
           }
           const el = els[0];
+          
+          // Get mouse position for tooltip
+          const rect = canvasRef.current?.getBoundingClientRect();
+          if (rect) {
+            setTooltip({
+              visible: true,
+              x: rect.left + rect.width / 2,
+              y: rect.top + rect.height / 2,
+              content: el.datasetIndex === 0 
+                ? `${LANE_LABELS[groups[el.index]]}: ${innerValues[el.index]}`
+                : `${outerLabels[el.index]}: ${outerValues[el.index]}`
+            });
+          }
+          
           if (el.datasetIndex === 0) {
             const g = groups[el.index];
             setHoveredLane(g);
             // Highlight matching card
-            document.querySelectorAll('.kpi-card').forEach(card => {
+            document.querySelectorAll('.kpi-link').forEach(card => {
               card.classList.remove('is-hot');
             });
-            const matchingCard = document.querySelector(`[data-group="${g}"]`);
+            const matchingCard = document.querySelector(`.area--${g.toLowerCase()}`);
             if (matchingCard) {
               matchingCard.classList.add('is-hot');
             }
@@ -160,10 +182,10 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
             const g = statusToGroup[s];
             setHoveredLane(g);
             // Highlight matching card
-            document.querySelectorAll('.kpi-card').forEach(card => {
+            document.querySelectorAll('.kpi-link').forEach(card => {
               card.classList.remove('is-hot');
             });
-            const matchingCard = document.querySelector(`[data-group="${g}"]`);
+            const matchingCard = document.querySelector(`.area--${g.toLowerCase()}`);
             if (matchingCard) {
               matchingCard.classList.add('is-hot');
             }
@@ -254,6 +276,21 @@ export default function NestedStatusKanbanChart({ periods }: Props) {
           </div>
         </div>
       </div>
+      
+      {/* Portal tooltip */}
+      {tooltip.visible && (
+        <BodyPortal>
+          <div 
+            className="chart-tooltip"
+            style={{
+              '--tx': `${tooltip.x}px`,
+              '--ty': `${tooltip.y - 40}px`
+            } as React.CSSProperties}
+          >
+            {tooltip.content}
+          </div>
+        </BodyPortal>
+      )}
     </div>
   );
 }
