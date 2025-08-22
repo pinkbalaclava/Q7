@@ -21,9 +21,12 @@ export function StatusPill({ status }: { status: string }) {
   const m = map[status] || { icon: Wrench, className: "bg-slate-100 text-slate-700" };
   const Icon = m.icon;
   
+  // Shorten long status names for display
+  const displayText = status === "Awaiting Questionnaire" ? "Awaiting Q'aire" : status;
+  
   return (
     <span className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-full ${m.className}`}>
-      <Icon size={12} /> {status}
+      <Icon size={12} /> {displayText}
     </span>
   );
 }
